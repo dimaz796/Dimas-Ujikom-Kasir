@@ -4,13 +4,15 @@
 
 @section('content')
     <h1>Daftar Produk</h1>
+    <a href=" {{ route('produk.create') }} " class="btn btn-success btn-sm mb-3">Tambah Produk</a>
     <table class="table">
-        <thead>
+        <thead class="table-dark">
             <tr>
-                <th>#</th>
+                <th>No</th>
                 <th>Nama Produk</th>
                 <th>Harga</th>
                 <th>Stok</th>
+                <th>Foto</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -21,10 +23,12 @@
                     <td>{{ $item->nama_produk }}</td>
                     <td>{{ $item->harga }}</td>
                     <td>{{ $item->stok }}</td>
+                    <td> 
+                        <img src="{{ asset('storage/' . $item->foto) }}" alt="Foto Produk" class="img-fluid" alt="Responsive image" style="width:50px; height: 50px;">
+                    </td>
                     <td>
-                        <a href="{{ url('/produk/' . $item->id) }}" class="btn btn-info btn-sm">Detail</a>
-                        <a href="{{ url('/produk/' . $item->id . '/edit') }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ url('/produk/' . $item->id) }}" method="POST" style="display:inline;">
+                        <a href="{{ route('produk.edit', ['id' => $item->produk_id]) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <form action="{{ route('produk.delete', ['id' => $item->produk_id]) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
@@ -38,5 +42,5 @@
             @endforelse
         </tbody>
     </table>
-    {{ $produk->links() }}
+
 @endsection
