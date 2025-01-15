@@ -14,8 +14,8 @@
             Data
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="#">Master Produk</a></li>
-            <li><a class="dropdown-item" href="#">Master User</a></li>
+            <li><a class="dropdown-item" href="{{ route('produk') }}">Master Produk</a></li>
+            <li><a class="dropdown-item" href="{{ route('user') }}">Master User</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">

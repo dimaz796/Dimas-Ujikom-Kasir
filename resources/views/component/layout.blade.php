@@ -9,7 +9,6 @@
 </head>
 <body>
     <!-- Navbar -->
-    
 
         @include('component.navbar')
     

@@ -9,7 +9,8 @@
 </head>
 <body>
     <div class="container"><br>
-        <div class="col-md-4 col-md-offset-4">
+        <div class="card">
+            <div class="col-md-4 col-md-offset-4">
             <h2 class="text-center"><b>Samquik</b><br>Aplikasi Kasir</h3>
             <hr>
             @if(session('error'))
@@ -29,6 +30,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Log In</button>
             </form>
+        </div>
         </div>
     </div>
 </body>
