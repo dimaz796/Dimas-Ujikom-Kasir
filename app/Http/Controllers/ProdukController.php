@@ -68,7 +68,6 @@ class ProdukController extends Controller
 
         if ($request->hasFile('foto')) {
 
-            //Proses untuk menghapus foto lama
             if ($produk->foto) {
                 $oldFilePath = storage_path('app/public/' . $produk->foto);
                 if (file_exists($oldFilePath)) {

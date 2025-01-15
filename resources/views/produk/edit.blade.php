@@ -1,6 +1,6 @@
 @extends('component.layout')
 
-@section('title', 'Edit Produk')
+@section('title', 'Editp Produk')
 
 @section('content')
 <div class="container ">

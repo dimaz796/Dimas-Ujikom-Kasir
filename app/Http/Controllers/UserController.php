@@ -38,4 +38,49 @@ class UserController extends Controller
 
         return redirect()->route('user')->with('success','Registrasi Berhasil');
     }
+
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+
+        return view('user.edit', compact('user'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validateData = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'role' => 'required',
+            'password' => 'nullable|min:4|confirmed'
+        ]);
+
+        $user = User::findOrFail($id);
+
+
+        if ($request->filled('password')) {
+            $validatedPassword = bcrypt($validateData['password']);
+        } else {
+            // Jika password tidak diisi, gunakan password lama
+            $validatedPassword = $user->password;
+        }
+    
+        dd($validatedPassword);
+        User::put([
+            'name' => $validateData['name'],
+            'email' => $validateData['email'],
+            'role' => $validateData['role'],
+            'password' => $validatedPassword,
+        ]);
+
+        return redirect()->route('user')->with('success', 'Perubahan Berhasil Dilakukan');
+    }
+
+    public function delete($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('user')->with('success', 'Pernghapusan Berhasil Dilakukan');
+    }
 }

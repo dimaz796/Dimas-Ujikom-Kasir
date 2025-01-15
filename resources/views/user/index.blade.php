@@ -11,15 +11,23 @@
             <th>Nama</th>
             <th>Email</th>
             <th>Role</th>
-            <!-- <th>Aksi</th> -->
+            <th>Aksi</th>
         </thead>
         <tbody>
-            @forelse ($user as $data)
+        @forelse ($user as $data)
                <tr>
                     <td>{{ $loop->iteration}}</td>
                     <td>{{ $data->name }}</td>
                     <td>{{ $data->email }}</td>
                     <td>{{ $data->role }}</td>
+                    <td>
+                        <a href="{{ route('user.edit', ['id' => $data->user_id]) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <form action="{{ route('user.delete', ['id' => $data->user_id]) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                        </form>
+                    </td>
                </tr>
             @empty
                 <tr>
