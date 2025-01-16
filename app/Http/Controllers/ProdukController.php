@@ -18,7 +18,7 @@ class ProdukController extends Controller
     public function show($id)
     {
         $produk = Produk::findOrFail($id);
-        return view('produk.show', compact('products'));
+        return view('produk.show', compact('produk'));
     }
     
     public function create()
@@ -54,6 +54,7 @@ class ProdukController extends Controller
         $produk = Produk::findOrFail($id);
         return view('produk.edit', compact('produk'));
     }
+
     
     public function update(Request $request,$id) 
     {

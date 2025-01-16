@@ -1,6 +1,6 @@
 @extends('component.layout')
 
-@section('title', 'Editp Produk')
+@section('title', 'Edit Produk')
 
 @section('content')
 <div class="container ">
@@ -23,7 +23,7 @@
                        <input type="file" name="foto" value="{{ $produk->foto }}" class="form-control">
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Tambah</button>
+                    <button type="submit" class="btn btn-primary">Edit</button>
                 </form>
             </div>
         </div>

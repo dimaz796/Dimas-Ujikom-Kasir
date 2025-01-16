@@ -13,6 +13,7 @@ Route::get('/actionlogout', [LoginController::class, 'logout'])->name('logout');
 // Route::get('home', [HomeController::class, 'index'])->name('home')->middleware('auth');
 
 Route::get('/beranda', [HomeController::class, 'index'])->name('home');
+Route::get('/beranda/search', [HomeController::class, 'index'])->name('produk.search');
 
 // Produk
 Route::get('/produk', [ProdukController::class,'index'])->name('produk');
@@ -21,6 +22,7 @@ Route::post('/produk', [ProdukController::class,'store'])->name('produk.store');
 Route::get('/produk/{id}/edit', [ProdukController::class,'edit'])->name('produk.edit');
 Route::post('/produk/{id}', [ProdukController::class,'update'])->name('produk.update');
 Route::delete('/produk/{id}', [ProdukController::class,'delete'])->name('produk.delete');
+Route::get('/produk/{id}', [ProdukController::class,'show'])->name('produk.show');
 
 //User
 Route::get('/user', [UserController::class,'index'])->name('user');

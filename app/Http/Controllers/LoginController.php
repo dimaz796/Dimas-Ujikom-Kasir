@@ -11,7 +11,7 @@ class LoginController extends Controller
     public function login()
     {
         if(Auth::check()){
-            return redirect()->route('produk');
+            return redirect()->route('home');
         }else{
             return view('auth.login');
         }
@@ -25,7 +25,7 @@ class LoginController extends Controller
         ];
 
         if(Auth::attempt($data)){
-            return redirect()->route('produk');
+            return redirect()->route('home');
         }else{
             Session::flash('error','Username Atau Password Salah!');
             return redirect()->route('login');
