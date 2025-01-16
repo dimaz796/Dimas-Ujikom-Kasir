@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\UserController;
@@ -10,6 +11,8 @@ Route::get('/', [LoginController::class,'login'])->name('login');
 Route::post('/login', [LoginController::class,'cekLogin'])->name('cekLogin');
 Route::get('/actionlogout', [LoginController::class, 'logout'])->name('logout');
 // Route::get('home', [HomeController::class, 'index'])->name('home')->middleware('auth');
+
+Route::get('/beranda', [HomeController::class, 'index'])->name('home');
 
 // Produk
 Route::get('/produk', [ProdukController::class,'index'])->name('produk');

@@ -6,7 +6,7 @@
     </a>
 
     <ul class="flex space-x-6 ml-auto mt-3">
-      <li><a href="" class="text-black/60 hover:text-black/80 font-semibold no-underline">Beranda</a></li>
+      <li><a href="{{ route('home') }}" class="text-black/60 hover:text-black/80 font-semibold no-underline">Beranda</a></li>
       <li><a href="{{ route('produk') }}" class="text-black/60 hover:text-black/80 font-semibold no-underline">Data Produk</a></li>
       <li><a href="{{ route('user') }}" class="text-black/60 hover:text-black/80 font-semibold no-underline">Data user</a></li>
       <li><a href="{{ route('logout') }}" class="text-black/60 hover:text-black/80 font-semibold no-underline">Logout</a></li>

@@ -64,9 +64,8 @@ class UserController extends Controller
             // Jika password tidak diisi, gunakan password lama
             $validatedPassword = $user->password;
         }
-    
-        dd($validatedPassword);
-        User::put([
+
+        $user->update([
             'name' => $validateData['name'],
             'email' => $validateData['email'],
             'role' => $validateData['role'],
