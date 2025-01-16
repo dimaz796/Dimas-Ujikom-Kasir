@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Aplikasi Produk')</title>
-    <!-- Tambahkan link CSS atau Bootstrap di sini -->
+    @vite('resources/css/app.css')
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-gray-100">
     <!-- Navbar -->
-
+    <nav class="bg-white">
         @include('component.navbar')
-    
+        </nav>
     <!-- Content -->
     <div class="container mt-4">
         @yield('content')

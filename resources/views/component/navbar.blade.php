@@ -1,32 +1,30 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-warning">
-  <div class="container">
-    <a class="navbar-brand fw-bold" href="#">Samquik</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse " id="navbarNavDropdown">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Data
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="{{ route('produk') }}">Master Produk</a></li>
-            <li><a class="dropdown-item" href="{{ route('user') }}">Master User</a></li>
-          </ul>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Pengaturan
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
+<nav class="flex items-center justify-between py-2 ">
+  <div class="flex w-full justify-between px-20">
+
+  <a href="#" class="flex items-center text-blue-700 hover:text-neutral-900 no-underline font-semibold">
+    Samquik
+    </a>
+
+    <ul class="flex space-x-6 ml-auto mt-3">
+      <li><a href="" class="text-black/60 hover:text-black/80 font-semibold no-underline">Beranda</a></li>
+      <li><a href="{{ route('produk') }}" class="text-black/60 hover:text-black/80 font-semibold no-underline">Data Produk</a></li>
+      <li><a href="{{ route('user') }}" class="text-black/60 hover:text-black/80 font-semibold no-underline">Data user</a></li>
+      <li><a href="{{ route('logout') }}" class="text-black/60 hover:text-black/80 font-semibold no-underline">Logout</a></li>
+     
+      <!-- <li class="relative group">
+        <a href="#" class="flex items-center rounded-full border-blue-100">
+          <img src="{{ asset('storage/component/profil.jpg') }}" alt="User Avatar" class="rounded-full w-8 h-8" />
+        </a>
+
+        <ul class="absolute right-0 mt-2 w-48 bg-white text-neutral-700 rounded-lg shadow-lg hidden group-hover:block dark:bg-surface-dark">
+          <li><a href="{{ route('logout') }}" class="block px-4 py-2 text-sm no-underline text-black">Log Out</a></li>
+        </ul>
+      </li> -->
+ 
+        
+      </li>
+    </ul>
+
+
   </div>
 </nav>

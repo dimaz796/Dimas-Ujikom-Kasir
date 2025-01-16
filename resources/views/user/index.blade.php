@@ -4,8 +4,10 @@
 
 @section('content')
     <h1>Daftar Pengguna</h1>
-    <a href="{{ route('user.create') }}" class="btn btn-success">Registrasi</a>
-    <table class="table mt-3">
+    <div class="me-auto">
+    <a href="{{ route('user.create') }}" class="btn btn-primary ">Registrasi</a>
+    </div>
+    <table class="table mt-3 rounded-lg overflow-hidden shadow-lg">
         <thead class="table-dark">
             <th>No</th>
             <th>Nama</th>
@@ -13,7 +15,7 @@
             <th>Role</th>
             <th>Aksi</th>
         </thead>
-        <tbody>
+        <tbody class="table-light">
         @forelse ($user as $data)
                <tr>
                     <td>{{ $loop->iteration}}</td>

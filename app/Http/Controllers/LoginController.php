@@ -35,6 +35,8 @@ class LoginController extends Controller
     public function logout()
     {
         Auth::logout();
+
+        Session::flash('message', 'Anda telah berhasil logout!');
         return redirect()->route('login');
     }
     

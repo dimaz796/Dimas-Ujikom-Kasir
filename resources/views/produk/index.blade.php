@@ -4,8 +4,8 @@
 
 @section('content')
     <h1>Daftar Produk</h1>
-    <a href=" {{ route('produk.create') }} " class="btn btn-success btn-sm mb-3">Tambah Produk</a>
-    <table class="table">
+    <a href=" {{ route('produk.create') }} " class="btn btn-primary btn-sm mb-3">Tambah Produk</a>
+    <table class="table rounded-lg overflow-hidden shadow-lg">
         <thead class="table-dark">
             <tr>
                 <th>No</th>
@@ -16,7 +16,7 @@
                 <th>Aksi</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="table-light">
             @forelse ($produk as $item)
                 <tr>
                     <td>{{ $loop->iteration }}</td>

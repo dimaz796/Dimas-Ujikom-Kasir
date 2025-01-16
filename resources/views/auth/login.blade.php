@@ -1,37 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login - Aplikasi Nilai Santri</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container"><br>
-        <div class="card">
-            <div class="col-md-4 col-md-offset-4">
-            <h2 class="text-center"><b>Samquik</b><br>Aplikasi Kasir</h3>
-            <hr>
-            @if(session('error'))
-            <div class="alert alert-danger">
-                <b>Opps!</b> {{session('error')}}
-            </div>
-            @endif
-            <form action="{{ route('cekLogin') }}" method="post">
+@vite('resources/css/app.css')
+
+@if(session('message'))
+    <script>
+        alert("{{ session('message') }}");
+    </script>
+@endif
+<!-- component -->
+<!-- Container -->
+<div class="flex flex-wrap min-h-screen w-full content-center justify-center bg-blue-50 py-10">
+  
+  <!-- Login component -->
+  <div class="flex shadow-md">
+    <!-- Login form -->
+    <div class="flex flex-wrap content-center justify-center rounded-l-md bg-white" style="width: 24rem; height: 32rem;">
+      <div class="w-72">
+        <!-- Heading -->
+        <h1 class="text-xl font-semibold">Samquik</h1>
+        <small class="text-gray-400">Silahkan Login</small>
+
+        @if (session('error'))
+        <div class="bg-red-600 text-white text-sm font-semibold p-2 rounded-lg shadow-md mb-4">
+            <p>{{ session('error') }}</p>
+        </div>
+        @endif
+        <!-- Form -->
+        <form class="mt-4" method="POST" action="{{ route('cekLogin') }}">
             @csrf
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="text" name="email" class="form-control" placeholder="Email" required="">
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" name="password" class="form-control" placeholder="Password" required="">
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Log In</button>
-            </form>
-        </div>
-        </div>
+          <div class="mb-3">
+            <label class="mb-2 block text-xs font-semibold">Email</label>
+            <input type="email" placeholder="Masukan Email Anda" name="email" required class="block w-full rounded-md border border-gray-300 focus:border-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-700 py-1 px-1.5 text-gray-500" />
+          </div>
+
+          <div class="mb-3">
+            <label class="mb-2 block text-xs font-semibold">Password</label>
+            <input type="password" placeholder="*****" name="password" required class="block w-full rounded-md border border-gray-300 focus:border-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-700 py-1 px-1.5 text-gray-500" />
+          </div>
+
+          <div class="mb-3">
+            <button type="submit" class="mb-1.5 block w-full text-center text-white bg-blue-700  hover:bg-blue-900 px-2 py-1.5 rounded-md"><p class="font-semibold">Sign in</p></button>
+          </div>
+        </form>
+      </div>
     </div>
-</body>
-</html>
+
+    <!-- Login banner -->
+    <div class="flex flex-wrap content-center justify-center rounded-r-md" style="width: 24rem; height: 32rem;">
+      <img class="w-full h-full bg-center bg-no-repeat bg-cover rounded-r-md" src="{{ asset('storage/component/login2.jpg') }}">
+    </div>
+
+  </div>
+</div>
