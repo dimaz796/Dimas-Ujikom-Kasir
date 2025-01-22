@@ -20,7 +20,7 @@ Route::post('/beranda/tambah', [HomeController::class, 'tambahKeranjang'])->name
 
 // Keranjang
 Route::get('/keranjang', [CartController::class, 'index'])->name('keranjang.index');
-Route::get('/keranjang/update', [CartController::class, 'updateKeranjang'])->name('keranjang.update');
+Route::post('/keranjang/update', [CartController::class, 'updateKeranjang'])->name('keranjang.update');
 Route::post('/keranjang/hapus', [CartController::class, 'hapusProduk'])->name('keranjang.hapus');
 
 

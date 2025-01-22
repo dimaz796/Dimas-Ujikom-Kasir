@@ -19,11 +19,10 @@ class CartController extends Controller
 
         $keranjang = Session::get('keranjang', []);
 
-
         $produkIds = array_keys($keranjang);
-
-
         $produk = Produk::whereIn('produk_id', $produkIds)->get();
+
+        $totalKeranjang = 0;
 
 
         foreach ($produk as $item) {
@@ -34,67 +33,86 @@ class CartController extends Controller
                 $keranjang[$item->produk_id]['harga'] = $item->harga;
                 $keranjang[$item->produk_id]['stok'] = $item->stok;
                 $keranjang[$item->produk_id]['foto'] = $item->foto;
+
+                $subtotal = $item->harga * $keranjang[$item->produk_id]['jumlah'];
+                $keranjang[$item->produk_id]['subtotal'] = $subtotal;
+
+                $totalKeranjang += $subtotal;
             }
         }
+
 
         // Update session keranjang setelah ditambahkan data produk yang lengkap
         Session::put('keranjang', $keranjang);
 
         // Kirimkan data keranjang ke view
-        return view('keranjang.index', compact('keranjang','jumlahTransaksi'));
+        return view('keranjang.index', compact('keranjang', 'jumlahTransaksi', 'totalKeranjang'));
     }
 
     public function updateKeranjang(Request $request)
     {
+        // Ambil data dari request
         $produkId = $request->input('produk_id');
         $jumlah = $request->input('jumlah');
+        $harga = $request->input('harga');  // Pastikan harga juga dikirim
 
-        // Ambil keranjang yang ada di session
+        // Hitung subtotal untuk produk ini (harga * jumlah)
+        $subtotal = $harga * $jumlah;
+
+        // Ambil keranjang dari session atau buat array kosong jika tidak ada
         $keranjang = Session::get('keranjang', []);
 
-        // Jika produk ada di keranjang, update jumlahnya
+        // Jika produk sudah ada dalam keranjang, update jumlah dan subtotalnya
         if (isset($keranjang[$produkId])) {
+            // Update jumlah produk dan subtotal baru
             $keranjang[$produkId]['jumlah'] = $jumlah;
+            $keranjang[$produkId]['subtotal'] = $subtotal; // Simpan subtotal di session
+        } else {
+            // Jika produk belum ada, tambahkan produk baru beserta subtotalnya
+            $keranjang[$produkId] = [
+                'produk_id' => $produkId,
+                'jumlah' => $jumlah,
+                'harga' => $harga,
+                'subtotal' => $subtotal,  // Simpan subtotal di session
+            ];
         }
 
-        // Simpan kembali keranjang yang sudah diperbarui ke session
+        // Simpan kembali keranjang yang telah diperbarui ke dalam session
         Session::put('keranjang', $keranjang);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Keranjang berhasil diperbarui',
-        ]);
+        // Mengembalikan response success
+        return response()->json(['status' => 'success']);
     }
 
     public function hapusProduk(Request $request)
-{
-    $produkId = $request->input('produk_id');
+    {
+        $produkId = $request->input('produk_id');
 
-    // Ambil keranjang dari session
-    $keranjang = Session::get('keranjang', []);
+        // Ambil keranjang dari session
+        $keranjang = Session::get('keranjang', []);
 
-    // Periksa apakah produk ada di keranjang
-    if (isset($keranjang[$produkId])) {
-        // Hapus produk dari keranjang
-        unset($keranjang[$produkId]);
+        // Periksa apakah produk ada di keranjang
+        if (isset($keranjang[$produkId])) {
+            // Hapus produk dari keranjang
+            unset($keranjang[$produkId]);
 
-        // Simpan kembali keranjang yang sudah diperbarui ke session
-        Session::put('keranjang', $keranjang);
+            // Simpan kembali keranjang yang sudah diperbarui ke session
+            Session::put('keranjang', $keranjang);
 
-        // Menghitung jumlah total produk dalam keranjang
-        $jumlahKeranjang = count($keranjang);
+            // Menghitung jumlah total produk dalam keranjang
+            $jumlahKeranjang = count($keranjang);
 
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Produk berhasil dihapus dari keranjang',
+                'jumlahKeranjang' => $jumlahKeranjang, // Kirim jumlah keranjang yang diperbarui
+            ]);
+        }
+
+        // Jika produk tidak ditemukan di keranjang
         return response()->json([
-            'status' => 'success',
-            'message' => 'Produk berhasil dihapus dari keranjang',
-            'jumlahKeranjang' => $jumlahKeranjang, // Kirim jumlah keranjang yang diperbarui
+            'status' => 'error',
+            'message' => 'Produk tidak ditemukan di keranjang',
         ]);
     }
-
-    // Jika produk tidak ditemukan di keranjang
-    return response()->json([
-        'status' => 'error',
-        'message' => 'Produk tidak ditemukan di keranjang',
-    ]);
-}
 }
