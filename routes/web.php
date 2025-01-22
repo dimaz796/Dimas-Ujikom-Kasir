@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProdukController;
@@ -12,9 +13,17 @@ Route::post('/login', [LoginController::class,'cekLogin'])->name('cekLogin');
 Route::get('/actionlogout', [LoginController::class, 'logout'])->name('logout');
 // Route::get('home', [HomeController::class, 'index'])->name('home')->middleware('auth');
 
+// Home
 Route::get('/beranda', [HomeController::class, 'index'])->name('home');
 Route::get('/beranda/search', [HomeController::class, 'index'])->name('produk.search');
 Route::post('/beranda/tambah', [HomeController::class, 'tambahKeranjang'])->name('keranjang');
+
+// Keranjang
+Route::get('/keranjang', [CartController::class, 'index'])->name('keranjang.index');
+Route::get('/keranjang/update', [CartController::class, 'updateKeranjang'])->name('keranjang.update');
+Route::post('/keranjang/hapus', [CartController::class, 'hapusProduk'])->name('keranjang.hapus');
+
+
 
 // Produk
 Route::get('/produk', [ProdukController::class,'index'])->name('produk');
