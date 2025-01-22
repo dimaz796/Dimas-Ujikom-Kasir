@@ -14,6 +14,7 @@ Route::get('/actionlogout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/beranda', [HomeController::class, 'index'])->name('home');
 Route::get('/beranda/search', [HomeController::class, 'index'])->name('produk.search');
+Route::post('/beranda/tambah', [HomeController::class, 'tambahKeranjang'])->name('keranjang');
 
 // Produk
 Route::get('/produk', [ProdukController::class,'index'])->name('produk');
