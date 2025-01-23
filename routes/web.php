@@ -21,6 +21,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/beranda/search', [HomeController::class, 'index'])->name('produk.search');
     Route::post('/beranda/tambah', [HomeController::class, 'tambahKeranjang'])->name('keranjang');
 
+<<<<<<< HEAD
     // Keranjang
     Route::get('/keranjang', [CartController::class, 'index'])->name('keranjang.index');
     Route::post('/keranjang/update', [CartController::class, 'updateKeranjang'])->name('keranjang.update');
@@ -37,6 +38,12 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/produk/{id}', [ProdukController::class, 'delete'])->name('produk.delete');
     Route::get('/produk/{id}', [ProdukController::class, 'show'])->name('produk.show');
 });
+=======
+// Keranjang
+Route::get('/keranjang', [CartController::class, 'index'])->name('keranjang.index');
+Route::post('/keranjang/update', [CartController::class, 'updateKeranjang'])->name('keranjang.update');
+Route::post('/keranjang/hapus', [CartController::class, 'hapusProduk'])->name('keranjang.hapus');
+>>>>>>> d69980d7bc03db9fb85d1c0efc33f79291e24f26
 
 
 Route::middleware(['auth'])->group(function () {
