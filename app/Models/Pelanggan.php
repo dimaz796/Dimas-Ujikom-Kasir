@@ -14,11 +14,12 @@ class Pelanggan extends Model
 
     protected $fillable = [
         'nama_pelanggan',
-        'alamat',
+        'alamat_pelanggan',
         'nomor_telepon',
-    ];  
+    ];
 
-    public function penjualans(){
+    public function penjualans()
+    {
         return $this->hasMany(Penjualan::class);
     }
 }
