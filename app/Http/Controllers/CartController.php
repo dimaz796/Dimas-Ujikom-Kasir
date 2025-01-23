@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DetailPenjualan;
+use App\Models\Pelanggan;
 use App\Models\Penjualan;
 use App\Models\Produk;
 use Carbon\Carbon;
@@ -19,11 +21,10 @@ class CartController extends Controller
 
         $keranjang = Session::get('keranjang', []);
 
-
         $produkIds = array_keys($keranjang);
-
-
         $produk = Produk::whereIn('produk_id', $produkIds)->get();
+
+        $totalKeranjang = 0;
 
 
         foreach ($produk as $item) {
@@ -34,67 +35,150 @@ class CartController extends Controller
                 $keranjang[$item->produk_id]['harga'] = $item->harga;
                 $keranjang[$item->produk_id]['stok'] = $item->stok;
                 $keranjang[$item->produk_id]['foto'] = $item->foto;
+
+                $subtotal = $item->harga * $keranjang[$item->produk_id]['jumlah'];
+                $keranjang[$item->produk_id]['subtotal'] = $subtotal;
+
+                $totalKeranjang += $subtotal;
             }
         }
 
-        // Update session keranjang setelah ditambahkan data produk yang lengkap
         Session::put('keranjang', $keranjang);
 
-        // Kirimkan data keranjang ke view
-        return view('keranjang.index', compact('keranjang','jumlahTransaksi'));
+        return view('keranjang.index', compact('keranjang', 'jumlahTransaksi', 'totalKeranjang'));
     }
 
     public function updateKeranjang(Request $request)
     {
         $produkId = $request->input('produk_id');
+        $subtotal = $request->input('subtotal');
         $jumlah = $request->input('jumlah');
+        $harga = $request->input('harga');
 
-        // Ambil keranjang yang ada di session
         $keranjang = Session::get('keranjang', []);
 
-        // Jika produk ada di keranjang, update jumlahnya
         if (isset($keranjang[$produkId])) {
             $keranjang[$produkId]['jumlah'] = $jumlah;
+            $keranjang[$produkId]['subtotal'] = $subtotal;
+        } else {
+            $keranjang[$produkId] = [
+                'produk_id' => $produkId,
+                'jumlah' => $jumlah,
+                'harga' => $harga,
+                'subtotal' => $subtotal,
+            ];
         }
 
-        // Simpan kembali keranjang yang sudah diperbarui ke session
         Session::put('keranjang', $keranjang);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Keranjang berhasil diperbarui',
-        ]);
+        return response()->json(['status' => 'success']);
     }
 
     public function hapusProduk(Request $request)
-{
-    $produkId = $request->input('produk_id');
+    {
+        $produkId = $request->input('produk_id');
 
-    // Ambil keranjang dari session
-    $keranjang = Session::get('keranjang', []);
+        $keranjang = Session::get('keranjang', []);
 
-    // Periksa apakah produk ada di keranjang
-    if (isset($keranjang[$produkId])) {
-        // Hapus produk dari keranjang
-        unset($keranjang[$produkId]);
+        if (isset($keranjang[$produkId])) {
 
-        // Simpan kembali keranjang yang sudah diperbarui ke session
-        Session::put('keranjang', $keranjang);
+            unset($keranjang[$produkId]);
+            Session::put('keranjang', $keranjang);
 
-        // Menghitung jumlah total produk dalam keranjang
-        $jumlahKeranjang = count($keranjang);
+            $jumlahKeranjang = count($keranjang);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Produk berhasil dihapus dari keranjang',
+                'jumlahKeranjang' => $jumlahKeranjang,
+            ]);
+        }
 
         return response()->json([
-            'status' => 'success',
-            'message' => 'Produk berhasil dihapus dari keranjang',
-            'jumlahKeranjang' => $jumlahKeranjang, // Kirim jumlah keranjang yang diperbarui
+            'status' => 'error',
+            'message' => 'Produk tidak ditemukan di keranjang',
         ]);
     }
 
-    // Jika produk tidak ditemukan di keranjang
-    return response()->json([
-        'status' => 'error',
-        'message' => 'Produk tidak ditemukan di keranjang',
-    ]);
-}
+    public function struk(Request $request)
+    {
+        $penjualan_id = $request->input('id_penjualan');
+
+        $penjualan = Penjualan::with(['pelanggan', 'detailPenjualan.produk'])
+            ->where('penjualan_id', $penjualan_id)
+            ->first();
+
+        if (!$penjualan) {
+            return redirect()->back()->withErrors('Data penjualan tidak ditemukan.');
+        }
+
+        return view('keranjang.struk', [
+            'penjualan' => $penjualan,
+            'pelanggan' => $penjualan->pelanggan,
+            'detailPenjualan' => $penjualan->detailPenjualan,
+        ]);
+    }
+
+    public function pembayaran(Request $request)
+    {
+        $userId = auth()->user()->user_id;
+        $namaPelanggan = $request->input('nama_pelanggan');
+        $alamatPelanggan = $request->input('alamat_pelanggan');
+        $nomorTelepon = $request->input('nomor_telepon');
+
+        $pelanggan = Pelanggan::create([
+            'nama_pelanggan' => $namaPelanggan,
+            'alamat_pelanggan' => $alamatPelanggan,
+            'nomor_telepon' => $nomorTelepon
+        ]);
+
+        if ($pelanggan) {
+            $pelangganId = $pelanggan->pelanggan_id;
+
+            $keranjang = session('keranjang', []);
+
+            $nilai_subtotal = array_column($keranjang, 'subtotal');
+            $total = array_sum($nilai_subtotal);
+
+            $penjualan = Penjualan::create([
+                'tanggal_penjualan'  => Carbon::now(),
+                'total_harga' => $total,
+                'pelanggan_id' => $pelangganId,
+                'user_id' => $userId,
+            ]);
+
+            if ($penjualan) {
+                $penjualanId = $penjualan->penjualan_id;
+
+                foreach ($keranjang as $item) {
+                    $detailPenjualan = DetailPenjualan::create([
+                        'penjualan_id' => $penjualanId,
+                        'produk_id' => $item['produk_id'],
+                        'jumlah_produk' => $item['jumlah'],
+                        'subtotal' => $item['subtotal']
+                    ]);
+
+                    $produk = Produk::find($item['produk_id']);
+                    if ($produk) {
+                        // Kurangi stok produk
+                        $produk->stok -= $item['jumlah'];
+                        $produk->save();
+                    }
+                }
+
+                if ($detailPenjualan) {
+
+                    $produk = Produk::find($item['produk_id']);
+                    if ($produk) {
+                        // Kurangi stok produk
+                        $produk->stok -= $item['jumlah'];
+                        $produk->save();
+                    }
+
+                    Session::forget('keranjang');
+                    return redirect()->route('keranjang.struk', ['id_penjualan' => $penjualanId]);
+                }
+            }
+        }
+    }
 }

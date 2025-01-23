@@ -10,6 +10,7 @@ class Penjualan extends Model
     use HasFactory;
 
     protected $table = 'penjualan';
+    protected $primaryKey = 'penjualan_id';
 
     protected $fillable = [
         'tanggal_penjualan',
@@ -18,15 +19,18 @@ class Penjualan extends Model
         'user_id',
     ];
 
-    public function pelanggan(){
-             return $this->belongsTo(Pelanggan::class);
+    public function pelanggan()
+    {
+        return $this->belongsTo(Pelanggan::class, 'pelanggan_id');
     }
 
-    public function user(){
-        return $this->belongsTo(User::class);
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function detail_penjualans(){
-        return $this->hasMany(DetailPenjualan::class);
+    public function detailPenjualan()
+    {
+        return $this->hasMany(DetailPenjualan::class, 'penjualan_id', 'penjualan_id');
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Penjualan;
@@ -14,9 +15,9 @@ class HomeController extends Controller
         $search = $request->input('search', '');
 
         $items = Produk::where('nama_produk', 'like', "%{$search}%")
-                        ->oldest()
-                        ->paginate(10);
-
+            ->where('stok', '>=', 1)
+            ->oldest()
+            ->paginate(10);
         $keranjang = Session::get('keranjang', []);
         $jumlahKeranjang = count($keranjang);
 
@@ -30,12 +31,36 @@ class HomeController extends Controller
     {
         $produk_id = $request->input('produk_id');
 
+        $produk = Produk::find($produk_id);
+
+        if (!$produk) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Produk tidak ditemukan',
+            ]);
+        }
+
+        if ($produk->stok < 1) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Stok habis',
+            ]);
+        }
+
         $keranjang = Session::get('keranjang', []);
 
         if (isset($keranjang[$produk_id])) {
+            $jumlahDalamKeranjang = $keranjang[$produk_id]['jumlah'];
+
+            if ($jumlahDalamKeranjang >= $produk->stok) {
+                return response()->json([
+                    'status' => 'info',
+                    'message' => 'Produk ini sudah ada habis, sudah ada dalam keranjang kamu.',
+                ]);
+            }
+
             $keranjang[$produk_id]['jumlah'] += 1;
         } else {
-            $produk = Produk::findOrFail($produk_id);
             $keranjang[$produk_id] = [
                 'produk_id' => $produk->produk_id,
                 'jumlah' => 1,
@@ -44,15 +69,14 @@ class HomeController extends Controller
 
         Session::put('keranjang', $keranjang);
 
-        $jumlahKeranjang = count($keranjang);  // Menghitung jumlah produk di keranjang
+        $jumlahKeranjang = count($keranjang);
         $produk = Produk::whereIn('produk_id', array_keys($keranjang))->get();
 
         return response()->json([
             'status' => 'success',
             'message' => 'Produk berhasil ditambahkan ke keranjang',
             'keranjang' => $produk,
-            'jumlahKeranjang' => $jumlahKeranjang,  // Mengirimkan jumlah keranjang yang terbaru
+            'jumlahKeranjang' => $jumlahKeranjang,
         ]);
     }
-
 }
