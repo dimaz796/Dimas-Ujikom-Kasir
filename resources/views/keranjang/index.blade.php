@@ -1,10 +1,6 @@
 @extends('component.layout')
 
-<<<<<<< HEAD
 @section('title', 'Keranjang')
-=======
-@section('title', 'Beranda')
->>>>>>> d69980d7bc03db9fb85d1c0efc33f79291e24f26
 
 @section('content')
     <!-- Struk -->
@@ -13,15 +9,9 @@
             <div class="card">
                 <!-- Nomor Transaksi -->
                 <div class="p-2">
-<<<<<<< HEAD
                     <h4 class="fw-bold text-blue-700">Samquik</h4>
                     <div class="fw-medium">Tanggal : <span id="current-time"></span></div>
                     <div class="fw-medium">Nomor : {{ $jumlahTransaksi }}</div>
-=======
-                    <h4 class="fw-semibold text-blue-700">Samquik</h4>
-                    <div>Tanggal : <span id="current-time"></span></div>
-                    <div>Nomor : {{ $jumlahTransaksi }}</div>
->>>>>>> d69980d7bc03db9fb85d1c0efc33f79291e24f26
                     <hr>
                 </div>
 
@@ -110,7 +100,6 @@
                             Belum Ada Produk Yang Di Pesan
                         </div>
                     @endforelse
-<<<<<<< HEAD
                 </div>
             </div>
         </div>
@@ -150,36 +139,6 @@
                 </div>
             </div>
         </div>
-=======
-                </div>
-            </div>
-        </div>
-        <div class="col-4">
-            <!-- Data Pelanggan -->
-            <div class="px-2">
-                <div class="bg-gray-50 border-2 p-2">
-                    <div class="fw-semibold">Data Pelanggan</div>
-                    <div class="py-1">
-                        <input type="text" class="form-control" placeholder="Nama Pelanggan" name="nama_pelanggan">
-                    </div>
-                    <div class="py-1">
-                        <input type="email" class="form-control" placeholder="Email Pelanggan" name="email_pelanggan">
-                    </div>
-                    <div class="py-1">
-                        <input type="number" class="form-control" placeholder="No Telephone" name="nomor_telepone">
-                    </div>
-                    <div class="flex">
-                        <div class="flex-initial w-50 p-1"><button class="btn btn-primary">Bayar Sekarang</button></div>
-                        <div class="col-4">
-                            <!-- Total Harga Keranjang -->
-                            <div class="fw-semibold p-1 text-xl">Total Harga Keranjang: <span id="total-keranjang">Rp.
-                                    {{ number_format($totalKeranjang) }}</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
->>>>>>> d69980d7bc03db9fb85d1c0efc33f79291e24f26
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -193,11 +152,7 @@
                 var hargaElement = $(this).closest('.py-2').find(
                     '.text-xs.text-gray-500');
                 var jumlah = parseInt(jumlahElement.text());
-<<<<<<< HEAD
                 var harga = parseInt(hargaElement.text().replace('Rp. ', '').replace(/\./g, '')
-=======
-                var harga = parseInt(hargaElement.text().replace('Rp. ', '').replace('.', '')
->>>>>>> d69980d7bc03db9fb85d1c0efc33f79291e24f26
                     .trim());
 
                 if ($(this).text() === '-') {
@@ -222,11 +177,8 @@
             function updateSubtotal(produkId, jumlah, harga) {
                 var subtotal = harga * jumlah;
 
-<<<<<<< HEAD
                 console.log(subtotal, harga, jumlah);
 
-=======
->>>>>>> d69980d7bc03db9fb85d1c0efc33f79291e24f26
                 // Memperbarui subtotal untuk produk yang relevan
                 $('#total-harga-' + produkId).text('Rp. ' + number_format(subtotal));
 
@@ -250,17 +202,12 @@
                     }
                 });
 
-<<<<<<< HEAD
-=======
-                // Memperbarui total harga keranjang
->>>>>>> d69980d7bc03db9fb85d1c0efc33f79291e24f26
                 updateTotal();
             }
 
             function updateTotal() {
                 var totalHarga = 0;
 
-<<<<<<< HEAD
                 $('.total-harga').each(function() {
                     var hargaItem = $(this).text().replace('Rp. ', '').replace(/\./g, '').replace(/,/g, '')
                         .trim();
@@ -292,51 +239,6 @@
                                 $('#produk-' + produkId)
                                     .remove();
                                 updateTotal();
-=======
-                // Mengiterasi setiap elemen yang memiliki kelas .total-harga
-                $('.total-harga').each(function() {
-                    // Mengambil nilai harga per item dan menghapus 'Rp. ' dan titik
-                    var hargaItem = parseInt($(this).text().replace('Rp. ', '').replace('.', ''), 10);
-
-                    // Menambahkan harga per item ke totalHarga
-                    totalHarga += hargaItem;
-                });
-
-                // Memperbarui elemen dengan id #total-keranjang
-                $('#total-keranjang').text('Rp. ' + number_format(totalHarga));
-            }
-
-            function number_format(number) {
-                return number.toLocaleString('id-ID');
-            }
-
-            // Jalankan updateTotal ketika halaman dimuat
-            $(document).ready(function() {
-                updateTotal();
-            });
-
-            // Event listener untuk klik ikon hapus
-            $('.delete-item').on('click', function() {
-                var produkId = $(this).data('id'); // Mendapatkan produk_id dari data-id
-
-                // Konfirmasi penghapusan
-                if (confirm('Apakah Anda yakin ingin menghapus produk ini dari keranjang?')) {
-                    // Kirim permintaan AJAX untuk menghapus produk dari keranjang
-                    $.ajax({
-                        url: '{{ route('keranjang.hapus') }}', // Ganti dengan route yang sesuai untuk menghapus produk dari keranjang
-                        method: 'POST',
-                        data: {
-                            produk_id: produkId,
-                            _token: '{{ csrf_token() }}', // Jangan lupa menyertakan CSRF token
-                        },
-                        success: function(response) {
-                            if (response.status == 'success') {
-                                // Jika penghapusan berhasil, perbarui keranjang di UI
-                                alert('Produk berhasil dihapus dari keranjang');
-                                $('#produk-' + produkId).remove(); // Hapus produk dari tampilan
-                                updateHargaTotal
-                                    (); // Mengupdate harga total setelah penghapusan produk
->>>>>>> d69980d7bc03db9fb85d1c0efc33f79291e24f26
                             } else {
                                 alert('Terjadi kesalahan saat menghapus produk');
                             }
@@ -348,26 +250,15 @@
                 }
             });
 
-<<<<<<< HEAD
             // memperbarui keranjang
             function updateKeranjang(produkId, jumlah) {
                 $.ajax({
                     url: '{{ route('keranjang.update') }}',
-=======
-            // Fungsi untuk mengupdate keranjang di server menggunakan AJAX
-            function updateKeranjang(produkId, jumlah) {
-                $.ajax({
-                    url: '{{ route('keranjang.update') }}', // Ganti dengan route yang sesuai untuk update keranjang
->>>>>>> d69980d7bc03db9fb85d1c0efc33f79291e24f26
                     method: 'POST',
                     data: {
                         produk_id: produkId,
                         jumlah: jumlah,
-<<<<<<< HEAD
                         _token: '{{ csrf_token() }}',
-=======
-                        _token: '{{ csrf_token() }}', // Jangan lupa menyertakan CSRF token
->>>>>>> d69980d7bc03db9fb85d1c0efc33f79291e24f26
                     },
                     success: function(response) {
                         if (response.status == 'success') {
@@ -382,31 +273,9 @@
                 });
             }
 
-<<<<<<< HEAD
             function number_format(number) {
                 return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
             }
-=======
-            // Fungsi untuk mengupdate harga total keranjang
-            function updateHargaTotal() {
-                var totalHarga = 0;
-
-                $('.total-harga').each(function() {
-                    var totalPerItem = parseInt($(this).text().replace('Rp. ', '').replace('.', ''));
-                    totalHarga += totalPerItem;
-                });
-
-                // Memperbarui harga total di UI
-                $('.text-xl').text('Rp. ' + number_format(totalHarga));
-            }
-
-            // Fungsi untuk format number dengan titik pemisah ribuan
-            function number_format(number) {
-                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-            }
-
-            // Memperbarui waktu setiap detik
->>>>>>> d69980d7bc03db9fb85d1c0efc33f79291e24f26
             setInterval(function() {
                 const now = new Date();
                 const formattedTime = now.toLocaleString('id-ID');

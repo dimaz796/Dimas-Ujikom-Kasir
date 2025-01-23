@@ -43,73 +43,34 @@ class CartController extends Controller
             }
         }
 
-<<<<<<< HEAD
         Session::put('keranjang', $keranjang);
 
-=======
-
-        // Update session keranjang setelah ditambahkan data produk yang lengkap
-        Session::put('keranjang', $keranjang);
-
-        // Kirimkan data keranjang ke view
->>>>>>> d69980d7bc03db9fb85d1c0efc33f79291e24f26
         return view('keranjang.index', compact('keranjang', 'jumlahTransaksi', 'totalKeranjang'));
     }
 
     public function updateKeranjang(Request $request)
     {
-        // Ambil data dari request
         $produkId = $request->input('produk_id');
         $subtotal = $request->input('subtotal');
         $jumlah = $request->input('jumlah');
-<<<<<<< HEAD
         $harga = $request->input('harga');
 
         $keranjang = Session::get('keranjang', []);
 
-=======
-        $harga = $request->input('harga');  // Pastikan harga juga dikirim
-
-        // Hitung subtotal untuk produk ini (harga * jumlah)
-        $subtotal = $harga * $jumlah;
-
-        // Ambil keranjang dari session atau buat array kosong jika tidak ada
-        $keranjang = Session::get('keranjang', []);
-
-        // Jika produk sudah ada dalam keranjang, update jumlah dan subtotalnya
->>>>>>> d69980d7bc03db9fb85d1c0efc33f79291e24f26
         if (isset($keranjang[$produkId])) {
-            // Update jumlah produk dan subtotal baru
             $keranjang[$produkId]['jumlah'] = $jumlah;
-<<<<<<< HEAD
             $keranjang[$produkId]['subtotal'] = $subtotal;
         } else {
-=======
-            $keranjang[$produkId]['subtotal'] = $subtotal; // Simpan subtotal di session
-        } else {
-            // Jika produk belum ada, tambahkan produk baru beserta subtotalnya
->>>>>>> d69980d7bc03db9fb85d1c0efc33f79291e24f26
             $keranjang[$produkId] = [
                 'produk_id' => $produkId,
                 'jumlah' => $jumlah,
                 'harga' => $harga,
-<<<<<<< HEAD
                 'subtotal' => $subtotal,
             ];
         }
 
         Session::put('keranjang', $keranjang);
 
-=======
-                'subtotal' => $subtotal,  // Simpan subtotal di session
-            ];
-        }
-
-        // Simpan kembali keranjang yang telah diperbarui ke dalam session
-        Session::put('keranjang', $keranjang);
-
-        // Mengembalikan response success
->>>>>>> d69980d7bc03db9fb85d1c0efc33f79291e24f26
         return response()->json(['status' => 'success']);
     }
 
@@ -117,7 +78,6 @@ class CartController extends Controller
     {
         $produkId = $request->input('produk_id');
 
-<<<<<<< HEAD
         $keranjang = Session::get('keranjang', []);
 
         if (isset($keranjang[$produkId])) {
@@ -133,36 +93,12 @@ class CartController extends Controller
                 'jumlahKeranjang' => $jumlahKeranjang,
             ]);
         }
-=======
-        // Ambil keranjang dari session
-        $keranjang = Session::get('keranjang', []);
 
-        // Periksa apakah produk ada di keranjang
-        if (isset($keranjang[$produkId])) {
-            // Hapus produk dari keranjang
-            unset($keranjang[$produkId]);
-
-            // Simpan kembali keranjang yang sudah diperbarui ke session
-            Session::put('keranjang', $keranjang);
-
-            // Menghitung jumlah total produk dalam keranjang
-            $jumlahKeranjang = count($keranjang);
->>>>>>> d69980d7bc03db9fb85d1c0efc33f79291e24f26
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Produk berhasil dihapus dari keranjang',
-                'jumlahKeranjang' => $jumlahKeranjang, // Kirim jumlah keranjang yang diperbarui
-            ]);
-        }
-
-        // Jika produk tidak ditemukan di keranjang
         return response()->json([
             'status' => 'error',
             'message' => 'Produk tidak ditemukan di keranjang',
         ]);
     }
-<<<<<<< HEAD
 
     public function struk(Request $request)
     {
@@ -245,6 +181,4 @@ class CartController extends Controller
             }
         }
     }
-=======
->>>>>>> d69980d7bc03db9fb85d1c0efc33f79291e24f26
 }
