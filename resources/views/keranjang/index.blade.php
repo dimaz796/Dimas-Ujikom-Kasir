@@ -82,7 +82,7 @@
                                 <div class="flex items-center justify-center w-1/12">
                                     <div class="bg-gray-50 w-full">
                                         <div class="px-2 py-3">
-                                            <span class="text-center text-sm font-semibold text-red-900 delete-item"
+                                            <span class="text-center text-sm font-semibold text-red-900 delete-item cursor-pointer"
                                                 data-id="{{ $item['produk_id'] }}">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                     stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -105,9 +105,11 @@
                         </div>
                     @endforelse
                 </div>
-                <div class="flex justify-center">
-                    <a href="{{ route('home') }}" class="no-underline fw-medium p-2">Tambah Pesanan </a>
-                </div>
+                @if(count($keranjang) > 0)
+                    <div class="flex justify-center">
+                        <a href="{{ route('home') }}" class="no-underline fw-medium p-2">Tambah Pesanan </a>
+                    </div>
+                @endif
             </div>
         </div>
         <div class="col-4">
