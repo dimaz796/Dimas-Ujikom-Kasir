@@ -17,7 +17,12 @@ class CartController extends Controller
     {
 
         $currentDate = Carbon::now();
+
+        $currentDateDmy = Carbon::now()->format('dmY');
+
         $jumlahTransaksi = Penjualan::whereDate('tanggal_penjualan', $currentDate)->count() + 1;
+
+        $nomor_transaksi = $currentDateDmy . $jumlahTransaksi;
 
         $keranjang = Session::get('keranjang', []);
 
@@ -45,7 +50,7 @@ class CartController extends Controller
 
         Session::put('keranjang', $keranjang);
 
-        return view('keranjang.index', compact('keranjang', 'jumlahTransaksi', 'totalKeranjang'));
+        return view('keranjang.index', compact('keranjang', 'nomor_transaksi', 'totalKeranjang'));
     }
 
     public function updateKeranjang(Request $request)
@@ -140,7 +145,16 @@ class CartController extends Controller
             $nilai_subtotal = array_column($keranjang, 'subtotal');
             $total = array_sum($nilai_subtotal);
 
+            $currentDate = Carbon::now()->format('dmY');
+
+            $currentDateCek = Carbon::now()->toDateString();
+
+            $jumlahTransaksi = Penjualan::whereDate('tanggal_penjualan', $currentDateCek)->count() + 1;
+    
+            $penjualanId = $currentDate . str_pad($jumlahTransaksi, 3, '0', STR_PAD_LEFT);
+    
             $penjualan = Penjualan::create([
+                'penjualan_id' => $penjualanId,
                 'tanggal_penjualan'  => Carbon::now(),
                 'total_harga' => $total,
                 'pelanggan_id' => $pelangganId,
@@ -167,13 +181,6 @@ class CartController extends Controller
                 }
 
                 if ($detailPenjualan) {
-
-                    $produk = Produk::find($item['produk_id']);
-                    if ($produk) {
-                        // Kurangi stok produk
-                        $produk->stok -= $item['jumlah'];
-                        $produk->save();
-                    }
 
                     Session::forget('keranjang');
                     return redirect()->route('keranjang.struk', ['id_penjualan' => $penjualanId]);

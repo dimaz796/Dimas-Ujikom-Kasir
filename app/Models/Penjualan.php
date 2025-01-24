@@ -13,6 +13,7 @@ class Penjualan extends Model
     protected $primaryKey = 'penjualan_id';
 
     protected $fillable = [
+        'penjualan_id',
         'tanggal_penjualan',
         'total_harga',
         'pelanggan_id',

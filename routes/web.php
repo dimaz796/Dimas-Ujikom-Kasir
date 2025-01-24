@@ -4,6 +4,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/keranjang/hapus', [CartController::class, 'hapusProduk'])->name('keranjang.hapus');
     Route::post('/keranjang/pembayaran', [CartController::class, 'pembayaran'])->name('keranjang.pembayaran');
     Route::get('/keranjang/struk', [CartController::class, 'struk'])->name('keranjang.struk');
+
+    // Transaksi Data
+    Route::get('/data_transaksi', [TransaksiController::class, 'index'])->name('transaksi');
+
 
     // Produk
     Route::get('/produk', [ProdukController::class, 'index'])->name('produk');

@@ -105,7 +105,6 @@
                     },
                     success: function(response) {
                         if (response.status === 'success') {
-                            alert(response.message); // Menampilkan pesan sukses
 
                             // Update keranjang
                             $('#keranjang-list').html(response.keranjang);

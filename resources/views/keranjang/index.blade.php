@@ -11,7 +11,7 @@
                 <div class="p-2">
                     <h4 class="fw-bold text-blue-700">Samquik</h4>
                     <div class="fw-medium">Tanggal : <span id="current-time"></span></div>
-                    <div class="fw-medium">Nomor : {{ $jumlahTransaksi }}</div>
+                    <div class="fw-medium">Nomor : {{ $nomor_transaksi }}</div>
                     <hr>
                 </div>
 
@@ -97,9 +97,16 @@
                         </div>
                     @empty
                         <div class="card">
-                            Belum Ada Produk Yang Di Pesan
+                            <div class="p-3">
+                            <span>
+                                Belum Ada Produk Yang Di Pesan, <a href="{{ route('home') }}" class="no-underline fw-medium">Pesan Sekarang</a>
+                            </span>
+                        </div>
                         </div>
                     @endforelse
+                </div>
+                <div class="flex justify-center">
+                    <a href="{{ route('home') }}" class="no-underline fw-medium p-2">Tambah Pesanan </a>
                 </div>
             </div>
         </div>
@@ -278,8 +285,15 @@
             }
             setInterval(function() {
                 const now = new Date();
-                const formattedTime = now.toLocaleString('id-ID');
-                document.getElementById('current-time').textContent = formattedTime;
+                const optionsTime = { hour: '2-digit', minute: '2-digit' };
+                const formattedTime = now.toLocaleTimeString('id-ID', optionsTime).replace(":", ".");
+                
+                const optionsDate = { day: 'numeric', month: 'long', year: 'numeric' };
+                const formattedDate = now.toLocaleDateString('id-ID', optionsDate);
+                
+                // Gabungkan waktu dan tanggal
+                const fullFormattedTime = `${formattedTime} ${formattedDate}`;
+                document.getElementById('current-time').textContent = fullFormattedTime;
             }, 1000);
         });
     </script>
