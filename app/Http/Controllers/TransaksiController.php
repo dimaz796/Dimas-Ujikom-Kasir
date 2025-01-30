@@ -61,6 +61,10 @@ class TransaksiController extends Controller
     $labels = $dataTransaksi->pluck('date')->toArray();
     $totalTransaksi = $dataTransaksi->pluck('total_transaksi')->toArray();
 
+    $totalSemuaTransaksi = $dataTransaksi->sum('total_transaksi');
+
+    $bulanNama = Carbon::createFromFormat('m', $bulan)->locale('id')->isoFormat('MMMM');
+
 
     return view('transaksi.laporan', [
         'labels' => $labels,
@@ -69,6 +73,8 @@ class TransaksiController extends Controller
         'selectedMonth' => $bulan,
         'selectedYear' => $tahun,
         'firstTransactionYear' => $firstTransactionYear,
+        'totalSemuaTransaksi' => $totalSemuaTransaksi,
+        'namaBulan' => $bulanNama,
     ]);
 }
 
