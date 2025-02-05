@@ -102,12 +102,18 @@ class TransaksiController extends Controller
         $startDate = Carbon::createFromFormat('Y-m', "{$tahun}-{$bulan}")->startOfMonth();
         $endDate = Carbon::createFromFormat('Y-m', "{$tahun}-{$bulan}")->endOfMonth();
 
-        // Ambil data sesuai filter bulan dan tahun
-        $dataProdukTerjual = // Ambil data produk terjual dari database
-        $totalSemuaTransaksi = // Hitung total semua transaksi
+        $produkTerjual = DetailPenjualan::join('produk', 'detail_penjualans.produk_id', '=', 'produk.produk_id')
+            ->whereBetween('detail_penjualans.created_at', [$startDate, $endDate])
+            ->groupBy('detail_penjualans.produk_id', 'produk.nama_produk')
+            ->selectRaw('detail_penjualans.produk_id, sum(jumlah_produk) as total_jual, sum(subtotal) as total_harga, produk.nama_produk as produk_nama')
+            ->orderByDesc('total_jual')
+            ->get();
+
+        // Menghitung Grand Total
+        $grandTotal = $produkTerjual->sum('total_harga');
 
         // Membuat PDF
-        $pdf = Pdf::loadView('pdf.penjualan', compact('dataProdukTerjual', 'totalSemuaTransaksi', 'bulan', 'tahun'));
+        $pdf = Pdf::loadView('transaksi.pdf_laporan', compact('produkTerjual', 'grandTotal', 'bulan', 'tahun'));
 
         return $pdf->download('Produk_Terjual_'.$bulan.'_'.$tahun.'.pdf');
     }

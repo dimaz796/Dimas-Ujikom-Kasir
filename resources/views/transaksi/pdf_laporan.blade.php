@@ -1,3 +1,5 @@
+@vite('resources/css/app.css')
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,37 +26,41 @@
     </style>
 </head>
 <body>
+<div class="container">
+    <div class="card mt-3">
+        <div class="p-3">
+            <h2 class="text-2xl font-semibold mt-10 mb-4">Detail Penjualan Terlaris</h2>
 
-    <div class="header">
-        <h2>Detail Penjualan Terlaris - {{ $bulan }} {{ $tahun }}</h2>
+            <!-- Tabel Detail Penjualan -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-200 text-center">
+                            <th class="px-4 py-2 border ">No</th>
+                            <th class="px-4 py-2 border ">Produk</th>
+                            <th class="px-4 py-2 border ">Jumlah Terjual</th>
+                            <th class="px-4 py-2 border ">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($produkTerjual as $detail)
+                            <tr class="text-center">
+                                <td class="px-4 py-2 border ">{{ $loop->iteration }}</td>
+                                <td class="px-4 py-2 border ">{{ $detail['produk_nama'] }}</td>
+                                <td class="px-4 py-2 border ">{{ $detail['total_jual'] }}</td>
+                                <td class="px-4 py-2 border ">Rp. {{ number_format($detail['total_harga'], 0, ',', '.') }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr class="bg-gray-200 text-center">
+                            <td colspan="3"><span class="fw-bold">Grand Total</span></td>
+                            <td><span class="fw-bold"> Rp. {{ number_format($grandTotal, 0, ',', '.') }}</span></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
     </div>
-
-    <table>
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Produk</th>
-                <th>Jumlah Terjual</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($dataProdukTerjual as $detail)
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $detail->produk->nama_produk }}</td>
-                    <td>{{ $detail->total_jual }}</td>
-                    <td>Rp. {{ number_format($detail->total_harga, 0, ',', '.') }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="3"><strong>Grand Total</strong></td>
-                <td><strong>Rp. {{ number_format($totalSemuaTransaksi, 0, ',', '.') }}</strong></td>
-            </tr>
-        </tfoot>
-    </table>
-
-</body>
+</div>
 </html>

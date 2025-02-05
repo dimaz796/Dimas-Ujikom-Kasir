@@ -28,6 +28,7 @@ class ProdukTerjualExport implements FromCollection, WithHeadings, WithMapping
             ->orderByDesc('total_jual')
             ->get();
 
+
         // Hitung Grand Total
         $grandTotal = $produkTerjual->sum('total_harga');
 
