@@ -53,7 +53,7 @@
                         <div class="col-12">
                             <div class="p-3">
                                 <button class="btn btn-primary w-full mb-2" onclick="window.print()"><span class="font-semibold">Print</span></button>
-                                <button class="btn btn-danger w-full mb-2"><span class="font-semibold">PDF</span></button>
+                                <button class="btn btn-danger w-full mb-2" onclick="window.location.href='{{ route('transaksi.exportToPDF', ['bulan' => $selectedMonth, 'tahun' => $selectedYear]) }}'"><span class="font-semibold">PDF</span></button>
                                 <button class="btn btn-success w-full" onclick="window.location.href='{{ route('transaksi.exportToExcel', ['bulan' => $selectedMonth, 'tahun' => $selectedYear]) }}'"><span class="font-semibold">Excel</span></button>
                             </div>
                         </div>
@@ -91,6 +91,12 @@
                                     </tr>
                                 @endforeach
                             </tbody>
+                            <tfoot>
+                                <tr class="bg-gray-200 text-center">
+                                    <td colspan="3"><span class="fw-bold">Grand Total</span></td>
+                                    <td><span class="fw-bold"> Rp. {{ number_format($totalSemuaTransaksi, 0, ',', '.') }}</span></td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>

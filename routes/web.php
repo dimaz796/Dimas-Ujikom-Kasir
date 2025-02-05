@@ -49,5 +49,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Transaksi Data
     Route::get('/data_transaksi', [TransaksiController::class, 'index'])->name('transaksi');
     Route::post('/laporan', [TransaksiController::class, 'laporan'])->name('laporan');
-    Route::get('transaksi/export', [TransaksiController::class, 'exportToExcel'])->name('transaksi.exportToExcel');
+    Route::get('transaksi/exportToExcel', [TransaksiController::class, 'exportToExcel'])->name('transaksi.exportToExcel');
+    Route::get('transaksi/exportToPDF', [TransaksiController::class, 'exportToPDF'])->name('transaksi.exportToPDF');
 });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\ProdukTerjualExport;
 use App\Models\DetailPenjualan;
 use App\Models\Penjualan;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -91,6 +92,24 @@ class TransaksiController extends Controller
 
         // Mengembalikan file Excel
         return Excel::download(new ProdukTerjualExport($startDate, $endDate), 'Produk_Terjual_'.$bulan.'_'.$tahun.'.xlsx');
+    }
+
+    public function exportToPDF(Request $request)
+    {
+        $bulan = $request->input('bulan');
+        $tahun = $request->input('tahun');
+
+        $startDate = Carbon::createFromFormat('Y-m', "{$tahun}-{$bulan}")->startOfMonth();
+        $endDate = Carbon::createFromFormat('Y-m', "{$tahun}-{$bulan}")->endOfMonth();
+
+        // Ambil data sesuai filter bulan dan tahun
+        $dataProdukTerjual = // Ambil data produk terjual dari database
+        $totalSemuaTransaksi = // Hitung total semua transaksi
+
+        // Membuat PDF
+        $pdf = Pdf::loadView('pdf.penjualan', compact('dataProdukTerjual', 'totalSemuaTransaksi', 'bulan', 'tahun'));
+
+        return $pdf->download('Produk_Terjual_'.$bulan.'_'.$tahun.'.pdf');
     }
 
 
