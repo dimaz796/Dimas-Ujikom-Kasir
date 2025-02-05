@@ -25,7 +25,7 @@
 <div class="container mx-auto p-3">
 
     <div class="row">
-        <div class="col-8">
+        <div class="col-8" id="print-controls">
             <div class="card">
                 <div class="p-3">
                     <h2 class="text-2xl font-semibold mb-4">Laporan Transaksi : {{$namaBulan }} - {{ $selectedYear }}</h2>
@@ -36,7 +36,7 @@
             </div>
         </div>
 
-        <div class="col-4">
+        <div class="col-4" id="print-controls">
             <div class="card">
                 <div class="p-3">
                     <span class=" text-xl p-3 text-blue-500 fw-semibold">Total Pendapatan</span>
@@ -44,7 +44,7 @@
                 </div>
             </div>
 
-            <div class="card mt-3" id="print-controls">
+            <div class="card mt-3">
                 <div class="p-3">
                     <div class="row">
                         <div class="col-12">
@@ -68,7 +68,7 @@
         <div class="col-12">
             <div class="card mt-3">
                 <div class="p-3">
-                    <h2 class="text-2xl font-semibold mt-10 mb-4">Detail Penjualan Terlaris</h2>
+                    <h2 class="text-2xl font-semibold mt-2 mb-4">Detail Penjualan Terlaris Bulan {{$namaBulan }} Tahun {{ $selectedYear }}</h2>
 
                     <!-- Tabel Detail Penjualan -->
                     <div class="overflow-x-auto">

@@ -3,6 +3,8 @@
 @section('title','Data User')
 
 @section('content')
+
+    <h1>Daftar Pengguna</h1>
     @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
@@ -14,11 +16,10 @@
             {{ session('error') }}
         </div>
     @endif
-    <h1>Daftar Pengguna</h1>
     <div class="me-auto">
     <a href="{{ route('user.create') }}" class="btn btn-primary ">Registrasi</a>
     </div>
-    <table class="table mt-3 rounded-lg overflow-hidden shadow-lg">
+    <table class="table mt-3 rounded-lg overflow-hidden shadow-lg text-center">
         <thead class="table-dark">
             <th>No</th>
             <th>Nama</th>

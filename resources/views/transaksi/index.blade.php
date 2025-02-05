@@ -91,7 +91,7 @@
                             </div>
 
                             <div class="mb-4">
-                                <button type="submit" class="w-full p-2 bg-blue-500 text-white rounded">Tampilkan Laporan</button>
+                                <button type="submit" class="w-full p-2 bg-blue-600 hover:bg-blue-500 text-white rounded">Tampilkan Laporan</button>
                             </div>
                         </form>
                     </div>

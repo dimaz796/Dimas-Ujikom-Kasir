@@ -10,21 +10,11 @@
       <li><a href="{{ route('produk') }}" class="text-black/60 hover:text-black/80 font-semibold no-underline">Data Produk</a></li>
       @auth
         @if (auth()->user()->role === "admin")
-        <li><a href="{{ route('transaksi') }}" class="text-black/60 hover:text-black/80 font-semibold no-underline">Data Transaksi</a></li>
         <li><a href="{{ route('user') }}" class="text-black/60 hover:text-black/80 font-semibold no-underline">Data user</a></li>
+        <li><a href="{{ route('transaksi') }}" class="text-black/60 hover:text-black/80 font-semibold no-underline">Data Transaksi</a></li>
         @endif
       @endauth
       <li><a href="{{ route('logout') }}" class="text-black/60 hover:text-black/80 font-semibold no-underline">Logout</a></li>
-
-      <!-- <li class="relative group">
-        <a href="#" class="flex items-center rounded-full border-blue-100">
-          <img src="{{ asset('storage/component/profil.jpg') }}" alt="User Avatar" class="rounded-full w-8 h-8" />
-        </a>
-
-        <ul class="absolute right-0 mt-2 w-48 bg-white text-neutral-700 rounded-lg shadow-lg hidden group-hover:block dark:bg-surface-dark">
-          <li><a href="{{ route('logout') }}" class="block px-4 py-2 text-sm no-underline text-black">Log Out</a></li>
-        </ul>
-      </li> -->
 
 
       </li>

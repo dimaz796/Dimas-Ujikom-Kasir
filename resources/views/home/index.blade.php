@@ -46,22 +46,22 @@
                 <div class="col-12">
                     <div class="row" id="produk-list">
                         @forelse($items as $item)
-                            <div class="col-3 pt-3">
+                            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 pt-3">
                                 <div class="card shadow-lg d-flex flex-column">
                                     <a href="{{ route('produk.show', ['id' => $item->produk_id]) }}">
                                         <img src="{{ asset('storage/' . $item->foto) }}" alt=""
                                             class="card-img-top w-full" style="height: 150px; object-fit: cover;">
                                     </a>
-                                    <div class="row flex-grow-1 d-flex flex-column">
+                                    <div class="row ">
                                         <div class="col-12">
-                                            <div class="fw-semibold ps-2 text-truncate" style="max-width: 100%;">
+                                            <div class="fw-semibold ps-2 text-lg font-inter text-truncate" style="max-width: 100%;">
                                                 {{ $item->nama_produk }}</div>
                                         </div>
-                                        <div class="col-12">
-                                            <div class="ps-2">Rp. {{ number_format($item->harga) }}</div>
+                                        <div class="col-6">
+                                            <div class="ps-2 font-semibold font-inter text-blue-700">Rp. {{ number_format($item->harga) }}</div>
                                         </div>
-                                        <div class="col-12">
-                                            <small class="ps-2 fw-semibold">
+                                        <div class="col-6">
+                                            <small class="pl-2 font-semibold text-right">
                                                 Stok : {{ $item->stok }}
                                             </small>
                                         </div>

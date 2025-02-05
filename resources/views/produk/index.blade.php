@@ -5,7 +5,7 @@
 @section('content')
     <h1>Daftar Produk</h1>
     <a href=" {{ route('produk.create') }} " class="btn btn-primary btn-sm mb-3">Tambah Produk</a>
-    <table class="table rounded-lg overflow-hidden shadow-lg">
+    <table class="table rounded-lg overflow-hidden shadow-lg text-center">
         <thead class="table-dark">
             <tr>
                 <th>No</th>
@@ -20,11 +20,14 @@
             @forelse ($produk as $item)
                 <tr>
                     <td>{{ $produk->firstItem() + $loop->iteration - 1 }}</td>
-                    <td>{{ $item->nama_produk }}</td>
-                    <td>{{ $item->harga }}</td>
+                    <td class="text-left"><span class="fw-semibold">{{ $item->nama_produk }}</span></td>
+
+                    <td>Rp {{ number_format($item->harga, 0, ',', '.') }}</td>
                     <td>{{ $item->stok }}</td>
                     <td>
-                        <img src="{{ asset('storage/' . $item->foto) }}" alt="Foto Produk" class="img-fluid" alt="Responsive image" style="width:50px; height: 50px;">
+                        <div class="d-flex justify-content-center">
+                            <img src="{{ asset('storage/' . $item->foto) }}" alt="Foto Produk" class="img-fluid" alt="Responsive image" style="width:50px; height: 50px;">
+                        </div>
                     </td>
                     <td>
                         <a href="{{ route('produk.edit', ['id' => $item->produk_id]) }}" class="btn btn-warning btn-sm">Edit</a>
