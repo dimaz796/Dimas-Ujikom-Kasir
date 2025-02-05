@@ -3,6 +3,17 @@
 @section('title','Data User')
 
 @section('content')
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
     <h1>Daftar Pengguna</h1>
     <div class="me-auto">
     <a href="{{ route('user.create') }}" class="btn btn-primary ">Registrasi</a>
@@ -18,7 +29,7 @@
         <tbody class="table-light">
         @forelse ($user as $data)
                <tr>
-                    <td>{{ $loop->iteration}}</td>
+                    <td>{{ $user->firstItem() + $loop->iteration -1}}</td>
                     <td>{{ $data->name }}</td>
                     <td>{{ $data->email }}</td>
                     <td>{{ $data->role }}</td>
@@ -39,5 +50,9 @@
         </tbody>
 
     </table>
+
+    <div class="d-flex justify-content-end">
+        {{ $user->links() }}
+    </div>
 
 @endsection

@@ -8,7 +8,7 @@
 <!-- component -->
 <!-- Container -->
 <div class="flex flex-wrap min-h-screen w-full content-center justify-center bg-blue-50 py-10">
-  
+
   <!-- Login component -->
   <div class="flex shadow-md">
     <!-- Login form -->
@@ -45,7 +45,7 @@
 
     <!-- Login banner -->
     <div class="flex flex-wrap content-center justify-center rounded-r-md" style="width: 24rem; height: 32rem;">
-      <img class="w-full h-full bg-center bg-no-repeat bg-cover rounded-r-md" src="{{ asset('storage/component/login2.jpg') }}">
+      <img class="w-full h-full bg-center bg-no-repeat bg-cover rounded-r-md" src="{{ asset('storage/component/login.jpg') }}">
     </div>
 
   </div>

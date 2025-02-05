@@ -133,7 +133,7 @@
                         </div>
                         <div class="flex items-center justify-between p-1">
                             <div class="flex-initial">
-                                <button class="btn btn-primary">Bayar Sekarang</button>
+                                <button class="btn btn-primary" {{ $keranjang ? '' : 'disabled'  }}>Bayar Sekarang</button>
                             </div>
                             <div class="flex items-center">
                                 <!-- Total Harga Keranjang -->
@@ -289,10 +289,10 @@
                 const now = new Date();
                 const optionsTime = { hour: '2-digit', minute: '2-digit' };
                 const formattedTime = now.toLocaleTimeString('id-ID', optionsTime).replace(":", ".");
-                
+
                 const optionsDate = { day: 'numeric', month: 'long', year: 'numeric' };
                 const formattedDate = now.toLocaleDateString('id-ID', optionsDate);
-                
+
                 // Gabungkan waktu dan tanggal
                 const fullFormattedTime = `${formattedTime} ${formattedDate}`;
                 document.getElementById('current-time').textContent = fullFormattedTime;

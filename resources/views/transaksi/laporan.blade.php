@@ -3,6 +3,24 @@
 @section('title', 'Laporan Penjualan')
 
 @section('content')
+<style>
+    @media print {
+        /* Menyembunyikan elemen tombol cetak saat print */
+        #print-controls {
+            display: none;
+        }
+
+        /* Opsional: Menyembunyikan elemen-elemen lain yang tidak ingin dicetak */
+        body * {
+            visibility: hidden;
+        }
+
+        /* Menampilkan kembali konten yang ingin dicetak */
+        .container, .container * {
+            visibility: visible;
+        }
+    }
+</style>
 
 <div class="container mx-auto p-3">
 
@@ -26,7 +44,7 @@
                 </div>
             </div>
 
-            <div class="card mt-3">
+            <div class="card mt-3" id="print-controls">
                 <div class="p-3">
                     <div class="row">
                         <div class="col-12">
@@ -34,9 +52,9 @@
                         </div>
                         <div class="col-12">
                             <div class="p-3">
-                                <button class="btn btn-primary w-full mb-2"><span class="font-semibold">Print</span></button>
+                                <button class="btn btn-primary w-full mb-2" onclick="window.print()"><span class="font-semibold">Print</span></button>
                                 <button class="btn btn-danger w-full mb-2"><span class="font-semibold">PDF</span></button>
-                                <button class="btn btn-success w-full"><span class="font-semibold">Excel</span></button>
+                                <button class="btn btn-success w-full" onclick="window.location.href='{{ route('transaksi.exportToExcel', ['bulan' => $selectedMonth, 'tahun' => $selectedYear]) }}'"><span class="font-semibold">Excel</span></button>
                             </div>
                         </div>
 

@@ -19,11 +19,11 @@
         <tbody class="table-light">
             @forelse ($produk as $item)
                 <tr>
-                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $produk->firstItem() + $loop->iteration - 1 }}</td>
                     <td>{{ $item->nama_produk }}</td>
                     <td>{{ $item->harga }}</td>
                     <td>{{ $item->stok }}</td>
-                    <td> 
+                    <td>
                         <img src="{{ asset('storage/' . $item->foto) }}" alt="Foto Produk" class="img-fluid" alt="Responsive image" style="width:50px; height: 50px;">
                     </td>
                     <td>
@@ -42,5 +42,9 @@
             @endforelse
         </tbody>
     </table>
+
+    <div class="d-flex justify-content-end mt-3">
+        {{ $produk->links() }}
+    </div>
 
 @endsection

@@ -9,7 +9,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $user = User::orderBy('created_at', 'asc')->get();
+        $user = User::orderBy('created_at', 'asc')->paginate(10);
 
         return view('user.index', compact('user'));
     }
@@ -29,14 +29,18 @@ class UserController extends Controller
         ]);
 
 
-        User::create([
-            'name' => $validateData['name'],
-            'email' => $validateData['email'],
-            'role' => $validateData['role'],
-            'password' => bcrypt($validateData['password']),
-        ]);
+        try{
+            User::create([
+                'name' => $validateData['name'],
+                'email' => $validateData['email'],
+                'role' => $validateData['role'],
+                'password' => bcrypt($validateData['password']),
+            ]);
 
-        return redirect()->route('user')->with('success','Registrasi Berhasil');
+            return redirect()->route('user')->with('success','Registrasi Berhasil');
+        } catch (\Exception $e){
+            return redirect()->route('user')->with('error', 'Registrasi Gagal: ' . $e->getMessage());
+        }
     }
 
     public function edit($id)
