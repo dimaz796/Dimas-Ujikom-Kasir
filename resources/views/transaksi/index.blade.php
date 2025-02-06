@@ -6,6 +6,11 @@
     <div class="container mx-auto p-4">
         <div class="row">
             <div class="col-9">
+                @if($transaksi->isEmpty())  <!-- Cek jika data transaksi kosong -->
+                    <div class="card">
+                        <p class="text-center text-gray-500 p-5">Belum ada data transaksi</p>
+                    </div>
+                @else
                 <!-- Card Utama -->
                 <div class="card mx-auto w-100 bg-white shadow-lg rounded-lg p-5">
                     <h1 class="text-3xl font-bold text-center mb-6">Data Penjualan</h1>
@@ -47,6 +52,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
             <div class="col-3">
                 <div class="card">

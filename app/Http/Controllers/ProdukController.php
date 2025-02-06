@@ -8,6 +8,20 @@ use PHPUnit\Framework\Constraint\FileExists;
 
 class ProdukController extends Controller
 {
+
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+
+        if (!$search) {
+            return redirect()->route('produk');
+        }
+
+        $produk = Produk::where('nama_produk', 'like', '%' . $search . '%')->oldest()->paginate(10);
+
+        return view('produk.index', compact('produk'));
+    }
+
     public function index()
     {
         $produk = Produk::oldest()->paginate(10);
@@ -89,9 +103,12 @@ class ProdukController extends Controller
 
     public function delete($id)
     {
+        dd($id);
         $produk = Produk::findOrFail($id);
         $produk->delete();
 
         return redirect('/produk')->with('success','Produk Berhasil Dihapus!');
     }
+
+
 }

@@ -16,7 +16,7 @@ Route::get('/actionlogout', [LoginController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
     // Home
     Route::get('/beranda', [HomeController::class, 'index'])->name('home');
-    Route::get('/beranda/search', [HomeController::class, 'index'])->name('produk.search');
+    Route::get('/beranda/search', [HomeController::class, 'index'])->name('beranda.search');
     Route::post('/beranda/tambah', [HomeController::class, 'tambahKeranjang'])->name('keranjang');
 
     // Keranjang
@@ -26,7 +26,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/keranjang/pembayaran', [CartController::class, 'pembayaran'])->name('keranjang.pembayaran');
     Route::get('/keranjang/struk', [CartController::class, 'struk'])->name('keranjang.struk');
 
+
     // Produk
+    Route::get('/produk/search', [ProdukController::class, 'search'])->name('produk.search');
     Route::get('/produk', [ProdukController::class, 'index'])->name('produk');
     Route::get('/produk/tambah', [ProdukController::class, 'create'])->name('produk.create');
     Route::post('/produk', [ProdukController::class, 'store'])->name('produk.store');
@@ -34,11 +36,15 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/produk/{id}', [ProdukController::class, 'update'])->name('produk.update');
     Route::delete('/produk/{id}', [ProdukController::class, 'delete'])->name('produk.delete');
     Route::get('/produk/{id}', [ProdukController::class, 'show'])->name('produk.show');
+
+
+
 });
 
 // Route hanya bisa diakses oleh admin
 Route::middleware(['auth', 'role:admin'])->group(function () {
     // User
+    Route::get('/user/search', [UserController::class, 'search'])->name('user.search');
     Route::get('/user', [UserController::class, 'index'])->name('user');
     Route::get('/user/tambah', [UserController::class, 'create'])->name('user.create');
     Route::post('/user', [UserController::class, 'store'])->name('user.store');

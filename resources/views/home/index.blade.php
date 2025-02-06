@@ -10,7 +10,7 @@
             <!-- Search Bar -->
             <div class="row">
                 <div class="col-6">
-                    <form action="{{ route('produk.search') }}" method="GET" class="flex items-start max-w-sm">
+                    <form action="{{ route('beranda.search') }}" method="GET" class="flex items-start max-w-sm">
                         <label for="simple-search" class="sr-only">Search</label>
                         <div class="relative w-full">
                             <input type="text" name="search" id="simple-search"
