@@ -19,6 +19,8 @@ class TransaksiController extends Controller
         $startDate = $request->input('start_date', null);
         $endDate = $request->input('end_date', null);
 
+        $isDisabled = !(isset($startDate) && isset($endDate));
+
         $transaksiQuery = Penjualan::with(['pelanggan', 'user']);
 
         if ($startDate && $endDate) {
@@ -38,7 +40,7 @@ class TransaksiController extends Controller
 
         $currentMonth = now()->month;
 
-        return view('transaksi.index', compact('transaksi', 'firstTransactionYear', 'currentYear', 'currentMonth', 'distinctMonths', 'startDate', 'endDate'));
+        return view('transaksi.index', compact('transaksi', 'firstTransactionYear', 'currentYear', 'currentMonth', 'distinctMonths', 'startDate', 'endDate','isDisabled'));
     }
 
 
@@ -125,6 +127,33 @@ class TransaksiController extends Controller
 
         return $pdf->download('Produk_Terjual_'.$bulan.'_'.$tahun.'.pdf');
     }
+
+    public function printPDF(Request $request)
+    {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $transaksiQuery = Penjualan::with(['pelanggan', 'user', 'detailPenjualan.produk']);
+
+        if ($startDate) {
+            $transaksiQuery->whereDate('tanggal_penjualan', '>=', $startDate);
+        }
+
+        if ($endDate) {
+            $transaksiQuery->whereDate('tanggal_penjualan', '<=', $endDate);
+        }
+
+        $tanggal = Carbon::now()->translatedFormat('j F Y');
+
+        $alamat = "Jalan Kamarung No.69, RT.2/RW.5, Citeureup, Cimahi Utara, Citeureup, Kec. Cimahi Utara, Kota Cimahi, Jawa Barat 40512";
+        $telephone = "(022) 12312341 ";
+
+        $transaksi = $transaksiQuery->get();
+
+        $pdf = PDF::loadView('transaksi.laporan_penjualan_pdf', compact('transaksi', 'startDate', 'endDate','alamat','telephone','tanggal'));
+
+        return $pdf->download('transaksi_penjualan_'. $startDate . '_sampai_' . $endDate.  '.pdf' );
+    }
+
 
 
 

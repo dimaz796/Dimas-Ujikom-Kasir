@@ -11,22 +11,35 @@
                 <div class="card mx-auto w-100 bg-white shadow-lg rounded-lg p-5">
                     <h1 class="text-3xl font-bold text-center mb-6">Data Penjualan</h1>
                     <hr class="mb-6">
-                    <form method="GET" action="{{ route('transaksi') }}" class="mb-4 flex items-center gap-3">
-                        <div class="flex items-center space-x-2">
-                            <input type="date" id="start_date" name="start_date" value="{{ request('start_date') }}"
-                                class="border border-gray-300 rounded-lg px-3 py-1 text-gray-700 text-sm w-32 focus:ring-2 focus:ring-blue-500 transition duration-150">
-                        </div>
+                    <div class="row">
+                        <div class="col-9">
+                            <form method="GET" action="{{ route('transaksi') }}" class="mb-4 flex items-center gap-3">
+                                <div class="flex items-center space-x-2">
+                                    <input type="date" id="start_date" name="start_date" value="{{ request('start_date') }}"
+                                        class="border border-gray-300 rounded-lg px-3 py-1 text-gray-700 text-sm w-32 focus:ring-2 focus:ring-blue-500 transition duration-150">
+                                </div>
 
-                        <div class="flex items-center space-x-2">
-                            <label for="end_date" class="text-gray-700 text-sm"> - </label>
-                            <input type="date" id="end_date" name="end_date" value="{{ request('end_date') }}"
-                                class="border border-gray-300 rounded-lg px-3 py-1 text-gray-700 text-sm w-32 focus:ring-2 focus:ring-blue-500 transition duration-150">
-                        </div>
+                                <div class="flex items-center space-x-2">
+                                    <label for="end_date" class="text-gray-700 text-sm"> - </label>
+                                    <input type="date" id="end_date" name="end_date" value="{{ request('end_date') }}"
+                                        class="border border-gray-300 rounded-lg px-3 py-1 text-gray-700 text-sm w-32 focus:ring-2 focus:ring-blue-500 transition duration-150">
+                                </div>
 
-                        <button type="submit" class="bg-blue-600 text-white px-4 py-1 rounded-lg text-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            Filter
-                        </button>
-                    </form>
+                                <button type="submit" class="bg-blue-600 text-white px-4 py-1 rounded-lg text-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    Filter
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-3">
+                            <div class="d-flex justify-content-end">
+                                <a href="{{ $isDisabled ? '#' : route('transaksi.printPDF', ['start_date' => $startDate, 'end_date' => $endDate]) }}"
+                                    class="no-underline bg-red-600 text-white px-4 py-1 rounded-lg text-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $isDisabled ? 'cursor-not-allowed opacity-50' : '' }}"
+                                    {{ $isDisabled ? 'disabled' : '' }}>
+                                    Print PDF
+                                </a>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Detail Penjualan -->
                     <div>
@@ -82,7 +95,7 @@
             <div class="col-3">
                 <div class="card">
                     <div class="p-3">
-                        <h2 class="mb-5">Laporan</h2>
+                        <div class="mb-5 fw-semibold text-lg">Laporan Penjualan Barang</div>
                         <form action="{{ route('laporan') }}" method="POST">
                             @csrf
                             <div class="mb-4">
@@ -120,7 +133,7 @@
                             </div>
 
                             <div class="mb-4">
-                                <button type="submit" class="w-full p-2 bg-blue-600 hover:bg-blue-500 text-white rounded">Tampilkan Laporan</button>
+                                <button type="submit" class="w-full p-2 bg-blue-600 hover:bg-blue-500 text-white rounded">Tampilkan Laporan Produk Terjual</button>
                             </div>
                         </form>
                     </div>

@@ -53,6 +53,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/user/{id}', [UserController::class, 'delete'])->name('user.delete');
 
     // Transaksi Data
+    Route::get('/transaksi/print-pdf', [TransaksiController::class, 'printPDF'])->name('transaksi.printPDF');
     Route::get('/data_transaksi', [TransaksiController::class, 'index'])->name('transaksi');
     Route::post('/laporan', [TransaksiController::class, 'laporan'])->name('laporan');
     Route::get('transaksi/exportToExcel', [TransaksiController::class, 'exportToExcel'])->name('transaksi.exportToExcel');
