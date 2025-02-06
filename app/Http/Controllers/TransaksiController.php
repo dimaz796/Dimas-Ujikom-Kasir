@@ -14,25 +14,33 @@ use Maatwebsite\Excel\Facades\Excel;
 class TransaksiController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $transaksi = Penjualan::with(['pelanggan','user'])->get();
+        $startDate = $request->input('start_date', null);
+        $endDate = $request->input('end_date', null);
+
+        $transaksiQuery = Penjualan::with(['pelanggan', 'user']);
+
+        if ($startDate && $endDate) {
+            $transaksiQuery->whereBetween('tanggal_penjualan', [$startDate, $endDate]);
+        }
+
+        $transaksi = $transaksiQuery->get();
 
         $firstTransactionYear = Penjualan::min(DB::raw('YEAR(tanggal_penjualan)'));
 
         $currentYear = now()->year;
 
         $distinctMonths = Penjualan::select(DB::raw('MONTH(tanggal_penjualan) as month'))
-        ->distinct()
-        ->orderBy(DB::raw('MONTH(tanggal_penjualan)'))
-        ->pluck('month');
+            ->distinct()
+            ->orderBy(DB::raw('MONTH(tanggal_penjualan)'))
+            ->pluck('month');
 
+        $currentMonth = now()->month;
 
-    $currentMonth = now()->month;
-
-    // Pass the variables to the view
-    return view('transaksi.index', compact('transaksi', 'firstTransactionYear', 'currentYear', 'currentMonth', 'distinctMonths'));
+        return view('transaksi.index', compact('transaksi', 'firstTransactionYear', 'currentYear', 'currentMonth', 'distinctMonths', 'startDate', 'endDate'));
     }
+
 
     public function laporan(Request $request)
     {
