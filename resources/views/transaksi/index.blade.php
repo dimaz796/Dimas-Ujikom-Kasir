@@ -15,13 +15,13 @@
                         <div class="col-9">
                             <form method="GET" action="{{ route('transaksi') }}" class="mb-4 flex items-center gap-3">
                                 <div class="flex items-center space-x-2">
-                                    <input type="date" id="start_date" name="start_date" value="{{ request('start_date') }}"
+                                    <input type="date" id="start_date" name="start_date" value="{{ old('start_date', request('end_date')) }}"
                                         class="border border-gray-300 rounded-lg px-3 py-1 text-gray-700 text-sm w-32 focus:ring-2 focus:ring-blue-500 transition duration-150">
                                 </div>
 
                                 <div class="flex items-center space-x-2">
                                     <label for="end_date" class="text-gray-700 text-sm"> - </label>
-                                    <input type="date" id="end_date" name="end_date" value="{{ request('end_date') }}"
+                                    <input type="date" id="end_date" name="end_date" value="{{ old('end_date', request('end_date')) }}"
                                         class="border border-gray-300 rounded-lg px-3 py-1 text-gray-700 text-sm w-32 focus:ring-2 focus:ring-blue-500 transition duration-150">
                                 </div>
 
@@ -32,14 +32,18 @@
                         </div>
                         <div class="col-3">
                             <div class="d-flex justify-content-end">
-                                <a href="{{ $isDisabled ? '#' : route('transaksi.printPDF', ['start_date' => $startDate, 'end_date' => $endDate]) }}"
-                                    class="no-underline bg-red-600 text-white px-4 py-1 rounded-lg text-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $isDisabled ? 'cursor-not-allowed opacity-50' : '' }}"
-                                    {{ $isDisabled ? 'disabled' : '' }}>
+                                <a href="{{ $isDisabled || $transaksi->isEmpty() ? '#' : route('transaksi.printPDF', ['start_date' => $startDate, 'end_date' => $endDate]) }}"
+                                    class="no-underline bg-red-600 text-white px-4 py-1 rounded-lg text-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-blue-500 {{ ($isDisabled || $transaksi->isEmpty()) ? 'cursor-not-allowed opacity-50 pointer-events-none' : '' }}">
                                     Print PDF
-                                </a>
+                                 </a>                                 
                             </div>
                         </div>
                     </div>
+                    @if(session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
 
                     <!-- Detail Penjualan -->
                     <div>
@@ -58,7 +62,7 @@
                             @if($transaksi->isEmpty())  <!-- Cek jika data transaksi kosong -->
                                 <tbody>
                                     <tr>
-                                        <td colspan="6" class="px-4 py-2 text-center text-gray-500">Belum ada data transaksi</td>
+                                        <td colspan="6" class="px-4 py-2 text-center text-gray-500">Tidak ada data transaksi</td>
                                     </tr>
                                 </tbody>
                             @else

@@ -19,13 +19,23 @@ class TransaksiController extends Controller
         $startDate = $request->input('start_date', null);
         $endDate = $request->input('end_date', null);
 
+        if ($startDate && $endDate && $startDate > $endDate) {
+            // Menampilkan alert error
+            return back()->with('error', 'Tanggal Tidak Valid')->withInput();
+        }
+
         $isDisabled = !(isset($startDate) && isset($endDate));
 
         $transaksiQuery = Penjualan::with(['pelanggan', 'user']);
 
-        if ($startDate && $endDate) {
+        if ($startDate && !$endDate) {
+            $transaksiQuery->whereDate('tanggal_penjualan', $startDate);
+        } elseif (!$startDate && $endDate) {
+            $transaksiQuery->whereDate('tanggal_penjualan', $endDate);
+        } elseif ($startDate && $endDate) {
             $transaksiQuery->whereBetween('tanggal_penjualan', [$startDate, $endDate]);
         }
+        
 
         $transaksi = $transaksiQuery->get();
 
