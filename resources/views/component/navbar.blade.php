@@ -9,6 +9,11 @@
       <li><a href="{{ route('home') }}" class="text-black/60 hover:text-black/80 font-semibold no-underline">Beranda</a></li>
       <li><a href="{{ route('produk') }}" class="text-black/60 hover:text-black/80 font-semibold no-underline">Data Produk</a></li>
       @auth
+        @if (auth()->user()->role === "petugas")
+        <li><a href="{{ route('riwayat_transaksi') }}" class="text-black/60 hover:text-black/80 font-semibold no-underline">Riwayat Transaksi</a></li>
+        @endif
+      @endauth
+      @auth
         @if (auth()->user()->role === "admin")
         <li><a href="{{ route('user') }}" class="text-black/60 hover:text-black/80 font-semibold no-underline">Data user</a></li>
         <li><a href="{{ route('transaksi') }}" class="text-black/60 hover:text-black/80 font-semibold no-underline">Data Transaksi</a></li>

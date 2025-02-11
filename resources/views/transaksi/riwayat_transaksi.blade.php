@@ -1,19 +1,18 @@
 @extends('component.layout')
 
-@section('title', 'Data Penjualan')
+@section('title', 'Riwayat Transaksi')
 
 @section('content')
     <div class="container mx-auto p-4">
         <div class="row">
-            <div class="col-9">
+            <div class="col-12">
 
                 <!-- Card Utama -->
                 <div class="card mx-auto w-100 bg-white shadow-lg rounded-lg p-5">
-                    <h1 class="text-3xl font-bold text-center mb-6">Data Penjualan</h1>
+                    <h1 class="text-3xl font-bold text-center mb-6">Riwayat Transaksi :  {{ auth()->user()->name }}</h1>
                     <hr class="mb-6">
-                    <div class="row">
-                        <div class="col-9">
-                            <form method="GET" action="{{ route('transaksi') }}" class="mb-4 flex items-center gap-3">
+ 
+                            <form method="GET" action="{{ route('riwayat_transaksi') }}" class="mb-4 flex items-center gap-3">
                                 <div class="flex items-center space-x-2">
                                     <input type="date" id="start_date" name="start_date" value="{{ old('start_date', request('end_date')) }}"
                                         class="border border-gray-300 rounded-lg px-3 py-1 text-gray-700 text-sm w-32 focus:ring-2 focus:ring-blue-500 transition duration-150">
@@ -29,18 +28,7 @@
                                     Filter
                                 </button>
                             </form>
-                        </div>
-                        <div class="col-3">
-                            <div class="d-flex justify-content-end">
-                                <a href="{{ ($startDate || $endDate) && !$isDisabled && !$transaksi->isEmpty() ? route('transaksi.printPDF', ['start_date' => $startDate, 'end_date' => $endDate]) : '#' }}"
-                                    class="no-underline bg-red-600 text-white px-4 py-1 rounded-lg text-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-blue-500 
-                                    {{ !($startDate || $endDate) || $isDisabled || $transaksi->isEmpty() ? 'cursor-not-allowed opacity-50 pointer-events-none' : '' }}">
-                                    Print PDF
-                                </a>
-                                                             
-                            </div>
-                        </div>
-                    </div>
+
                     @if(session('error'))
                         <div class="alert alert-danger">
                             {{ session('error') }}
@@ -92,7 +80,7 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
-                                
+
                                 <tfoot class="bg-gray-100">
                                     <tr>
                                         <th colspan="4" class="px-4 py-2 border border-gray-300 text-center">Total Keseluruhan</th>
@@ -101,54 +89,6 @@
                                 </tfoot>
                             @endif
                         </table>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-3">
-                <div class="card">
-                    <div class="p-3">
-                        <div class="mb-5 fw-semibold text-lg">Laporan Penjualan Barang</div>
-                        <form action="{{ route('laporan') }}" method="POST">
-                            @csrf
-                            <div class="mb-4">
-                                <label for="bulan" class="block text-sm font-medium text-gray-700">Pilih Bulan</label>
-                                <select id="bulan" name="bulan" class="block w-full mt-1 p-2 border border-gray-300 rounded" required>
-                                    @php
-                                        $months = [
-                                            1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
-                                            5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus',
-                                            9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
-                                        ];
-                                    @endphp
-                                    <option value="" selected disabled>Pilih Bulan</option>
-                                    @foreach($distinctMonths as $monthNumber)
-                                        <option value="{{ $monthNumber }}" {{ $monthNumber == $currentMonth ? 'selected' : '' }}>
-                                            {{ $months[$monthNumber] }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="mb-4">
-                                <label for="tahun" class="block text-sm font-medium text-gray-700">Pilih Tahun</label>
-                                <select id="tahun" name="tahun" class="block w-full mt-1 p-2 border border-gray-300 rounded" required>
-                                    @php
-                                        $firstTransactionYear = $firstTransactionYear ?? $currentYear;
-                                    @endphp
-                                    <option value="" selected disabled>Pilih Tahun</option>
-                                    @for ($year = $firstTransactionYear; $year <= $currentYear; $year++)
-                                        <option value="{{ $year }}" {{ $year == $currentYear ? 'selected' : '' }}>
-                                            {{ $year }}
-                                        </option>
-                                    @endfor
-                                </select>
-                            </div>
-
-                            <div class="mb-4">
-                                <button type="submit" class="w-full p-2 bg-blue-600 hover:bg-blue-500 text-white rounded">Tampilkan Laporan Produk Terjual</button>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </div>

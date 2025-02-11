@@ -60,7 +60,6 @@
 
                     </div>
 
-
                 </div>
             </div>
         </div>
@@ -72,7 +71,7 @@
 
                     <!-- Tabel Detail Penjualan -->
                     <div class="overflow-x-auto">
-                        <table class="min-w-full bg-white border border-gray-300">
+                        <table class="w-full bg-white border border-gray-300">
                             <thead>
                                 <tr class="bg-gray-200 text-center">
                                     <th class="px-4 py-2 border ">No</th>

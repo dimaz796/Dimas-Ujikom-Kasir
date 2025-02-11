@@ -24,7 +24,8 @@ class TransaksiController extends Controller
             return back()->with('error', 'Tanggal Tidak Valid')->withInput();
         }
 
-        $isDisabled = !(isset($startDate) && isset($endDate));
+        $isDisabled = !($startDate || $endDate);
+
 
         $transaksiQuery = Penjualan::with(['pelanggan', 'user']);
 
@@ -36,7 +37,6 @@ class TransaksiController extends Controller
             $transaksiQuery->whereBetween('tanggal_penjualan', [$startDate, $endDate]);
         }
         
-
         $transaksi = $transaksiQuery->get();
 
         $firstTransactionYear = Penjualan::min(DB::raw('YEAR(tanggal_penjualan)'));
@@ -50,8 +50,22 @@ class TransaksiController extends Controller
 
         $currentMonth = now()->month;
 
-        return view('transaksi.index', compact('transaksi', 'firstTransactionYear', 'currentYear', 'currentMonth', 'distinctMonths', 'startDate', 'endDate','isDisabled'));
+        $grandTotal = $transaksi->sum('total_harga');
+        return view('transaksi.index', compact(
+            'transaksi', 
+            'grandTotal', 
+            'firstTransactionYear', 
+            'currentYear', 
+            'currentMonth', 
+            'distinctMonths', 
+            'startDate', 
+            'endDate', 
+            'isDisabled'
+        ));
+        
+        
     }
+    
 
 
     public function laporan(Request $request)
@@ -154,17 +168,59 @@ class TransaksiController extends Controller
 
         $tanggal = Carbon::now()->translatedFormat('j F Y');
 
-        $alamat = "Jalan Kamarung No.69, RT.2/RW.5, Citeureup, Cimahi Utara, Citeureup, Kec. Cimahi Utara, Kota Cimahi, Jawa Barat 40512";
+        $alamat = "Jalan TokTok No 12";
         $telephone = "(022) 12312341 ";
 
         $transaksi = $transaksiQuery->get();
 
+        if ($startDate && $endDate) {
+            $fileName = 'transaksi_penjualan_' . $startDate . '_sampai_' . $endDate . '.pdf';
+        } elseif ($startDate) {
+            $fileName = 'transaksi_penjualan_' . $startDate . '.pdf';
+        } elseif ($endDate) {
+            $fileName = 'transaksi_penjualan_' . $endDate . '.pdf';
+        } else {
+            $fileName = 'transaksi_penjualan.pdf';
+        }
+
         $pdf = PDF::loadView('transaksi.laporan_penjualan_pdf', compact('transaksi', 'startDate', 'endDate','alamat','telephone','tanggal'));
 
-        return $pdf->download('transaksi_penjualan_'. $startDate . '_sampai_' . $endDate.  '.pdf' );
+        return $pdf->download($fileName);
     }
 
+    // Hanya Untuk Petugas
+    public function riwayatTransaksi(Request $request)
+    {
+        $startDate = $request->input('start_date', null);
+        $endDate = $request->input('end_date', null);
 
+        if ($startDate && $endDate && $startDate > $endDate) {
+            // Menampilkan alert error
+            return back()->with('error', 'Tanggal Tidak Valid')->withInput();
+        }
+
+        $isDisabled = !(isset($startDate) && isset($endDate));
+
+        
+        $transaksiQuery = Penjualan::with(['pelanggan', 'user'])
+                                    ->where('user_id',auth()->id());
+
+        if ($startDate && !$endDate) {
+            $transaksiQuery->whereDate('tanggal_penjualan', $startDate);
+        } elseif (!$startDate && $endDate) {
+            $transaksiQuery->whereDate('tanggal_penjualan', $endDate);
+        } elseif ($startDate && $endDate) {
+            $transaksiQuery->whereBetween('tanggal_penjualan', [$startDate, $endDate]);
+        }
+        
+
+        $transaksi = $transaksiQuery->get();
+
+        $grandTotal = $transaksi->sum('total_harga');
+
+
+        return view('transaksi.riwayat_transaksi', compact('transaksi', 'startDate', 'endDate','isDisabled','grandTotal'));
+    }
 
 
 

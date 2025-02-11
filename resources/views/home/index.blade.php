@@ -37,12 +37,10 @@
                         
                             <!-- Cart item count positioned on top right of the cart icon -->
                             <span id="jumlah-keranjang"
-                                class="position-absolute top-0 start-100 translate-middle bg-blue-600 text-white rounded-full w-5 h-5 d-flex align-items-center justify-center text-xs">
+                                class="position-absolute top-0 start-100 translate-middle bg-red-600 text-white rounded-full w-5 h-5 d-flex align-items-center justify-center text-xs">
                                 {{ $jumlahKeranjang }}
                             </span>
-                        </a>
-                        
-                                               
+                        </a>              
                     </div>
 
                 </div>

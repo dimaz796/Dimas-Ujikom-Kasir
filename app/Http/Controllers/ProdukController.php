@@ -19,14 +19,29 @@ class ProdukController extends Controller
 
         $produk = Produk::where('nama_produk', 'like', '%' . $search . '%')->oldest()->paginate(10);
 
-        return view('produk.index', compact('produk'));
+        $cekStok = Produk::where('stok', '<', 25)->get()->count();
+
+        return view('produk.index', compact('produk','cekStok'));
     }
+
+    public function restock(Request $request)
+    {
+        $produk = Produk::where('stok', '<', 25)->paginate(10);
+
+        $cekStok = $produk->count();
+
+        return view('produk.index', compact('produk','cekStok'));
+    }
+
 
     public function index()
     {
         $produk = Produk::oldest()->paginate(10);
+        
 
-        return view('produk.index', compact('produk'));
+        $cekStok = Produk::where('stok', '<', 25)->get()->count();
+
+        return view('produk.index', compact('produk','cekStok'));
     }
 
     public function show($id)

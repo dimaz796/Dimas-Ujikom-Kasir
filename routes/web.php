@@ -29,6 +29,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Produk
     Route::get('/produk/search', [ProdukController::class, 'search'])->name('produk.search');
+    Route::get('/produk/restock', [ProdukController::class, 'restock'])->name('produk.restock');
     Route::get('/produk', [ProdukController::class, 'index'])->name('produk');
     Route::get('/produk/tambah', [ProdukController::class, 'create'])->name('produk.create');
     Route::post('/produk', [ProdukController::class, 'store'])->name('produk.store');
@@ -36,7 +37,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/produk/{id}', [ProdukController::class, 'update'])->name('produk.update');
     Route::delete('/produk/{id}', [ProdukController::class, 'delete'])->name('produk.delete');
     Route::get('/produk/{id}', [ProdukController::class, 'show'])->name('produk.show');
+    
 
+    //Riwayat Transaksi
+    Route::get('/riwayat-transaksi', [TransaksiController::class, 'riwayatTransaksi'])->name('riwayat_transaksi');
 
 
 });
@@ -54,7 +58,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     // Transaksi Data
     Route::get('/transaksi/print-pdf', [TransaksiController::class, 'printPDF'])->name('transaksi.printPDF');
-    Route::get('/data_transaksi', [TransaksiController::class, 'index'])->name('transaksi');
+    Route::get('/data-transaksi', [TransaksiController::class, 'index'])->name('transaksi');
     Route::post('/laporan', [TransaksiController::class, 'laporan'])->name('laporan');
     Route::get('transaksi/exportToExcel', [TransaksiController::class, 'exportToExcel'])->name('transaksi.exportToExcel');
     Route::get('transaksi/exportToPDF', [TransaksiController::class, 'exportToPDF'])->name('transaksi.exportToPDF');
