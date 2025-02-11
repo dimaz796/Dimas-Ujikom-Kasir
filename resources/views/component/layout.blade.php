@@ -15,7 +15,7 @@
     </nav>
 
     <!-- Wrapper agar konten mengisi ruang kosong -->
-    <main class="flex-grow container mt-4">
+    <main class="flex-grow container my-4">
         @yield('content')
     </main>
 

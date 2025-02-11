@@ -103,7 +103,6 @@ class ProdukController extends Controller
 
     public function delete($id)
     {
-        dd($id);
         $produk = Produk::findOrFail($id);
         $produk->delete();
 
