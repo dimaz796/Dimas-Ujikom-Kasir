@@ -1,0 +1,62 @@
+[
+    {
+        "nama_produk": "Teh Botol Sosro 320 ml",
+        "harga": 8000,
+        "stok": 43,
+        "foto": "produk/Teh_Botol_Sosro.jpg"
+    },
+    {
+        "nama_produk": "Aqua Mineral 500 ml",
+        "harga": 4500,
+        "stok": 99,
+        "foto": "produk/aqua.jpg"
+    },
+    {
+        "nama_produk": "Snack CemCem 200G",
+        "harga": 8000,
+        "stok": 19,
+        "foto": "produk/cemcem.jpg"
+    },
+    {
+        "nama_produk": "Fruit Tea 320 ml",
+        "harga": 4200,
+        "stok": 100,
+        "foto": "produk/fruit tea.jpg"
+    },
+    {
+        "nama_produk": "Garuda Rosta 200G",
+        "harga": 5000,
+        "stok": 100,
+        "foto": "produk/garuda_rosta.jpg"
+    },
+    {
+        "nama_produk": "Mie Goreng Rendang",
+        "harga": 3500,
+        "stok": 100,
+        "foto": "produk/mie_rendang.jpg"
+    },
+    {
+        "nama_produk": "Pop Mie Rasa Baso",
+        "harga": 5000,
+        "stok": 100,
+        "foto": "produk/pop_mie.jpg"
+    },
+    {
+        "nama_produk": "Sari Roti 10 Potong",
+        "harga": 15000,
+        "stok": 15,
+        "foto": "produk/roti_potong.jpg"
+    },
+    {
+        "nama_produk": "Sari Roti Rasa Keju",
+        "harga": 10000,
+        "stok": 10,
+        "foto": "produk/sari_roti.jpg"
+    },
+    {
+        "nama_produk": "Snack Taro 200G",
+        "harga": 4000,
+        "stok": 100,
+        "foto": "produk/taro.jpg"
+    }
+]

@@ -23,6 +23,6 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin'
         ]);
 
-        // Produk::factory(50)->create();
+        $this->call(ProdukSeeder::class);
     }
 }
