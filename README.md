@@ -37,6 +37,12 @@ extension=gd
 extension=zip
 ```
 
+-   Buka Xampp lalu klik admin pada menu mysql setelah itu buat database dengan nama sesuai di **.env**
+
+```bash
+DB_DATABASE=ujikom_kasir
+```
+
 -   Install dependencies dengan Composer dan NPM:
 
 ```bash
