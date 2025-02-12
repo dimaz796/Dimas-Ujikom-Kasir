@@ -131,61 +131,71 @@ class CartController extends Controller
         $alamatPelanggan = $request->input('alamat_pelanggan');
         $nomorTelepon = $request->input('nomor_telepon');
 
+        $keranjang = session('keranjang', []);
+
         $pelanggan = Pelanggan::create([
             'nama_pelanggan' => $namaPelanggan,
             'alamat_pelanggan' => $alamatPelanggan,
             'nomor_telepon' => $nomorTelepon
         ]);
 
-        if ($pelanggan) {
-            $pelangganId = $pelanggan->pelanggan_id;
+        // dd($keranjang);
 
-            $keranjang = session('keranjang', []);
+        if ($keranjang) {
 
-            $nilai_subtotal = array_column($keranjang, 'subtotal');
-            $total = array_sum($nilai_subtotal);
+            if ($pelanggan) {
+                $pelangganId = $pelanggan->pelanggan_id;
 
-            $currentDate = Carbon::now()->format('dmY');
 
-            $currentDateCek = Carbon::now()->toDateString();
+                $nilai_subtotal = array_column($keranjang, 'subtotal');
+                $total = array_sum($nilai_subtotal);
 
-            $jumlahTransaksi = Penjualan::whereDate('tanggal_penjualan', $currentDateCek)->count() + 1;
-    
-            $penjualanId = $currentDate . str_pad($jumlahTransaksi, 3, '0', STR_PAD_LEFT);
-    
-            $penjualan = Penjualan::create([
-                'penjualan_id' => $penjualanId,
-                'tanggal_penjualan'  => Carbon::now(),
-                'total_harga' => $total,
-                'pelanggan_id' => $pelangganId,
-                'user_id' => $userId,
-            ]);
+                $currentDate = Carbon::now()->format('dmY');
 
-            if ($penjualan) {
-                $penjualanId = $penjualan->penjualan_id;
+                $currentDateCek = Carbon::now()->toDateString();
 
-                foreach ($keranjang as $item) {
-                    $detailPenjualan = DetailPenjualan::create([
-                        'penjualan_id' => $penjualanId,
-                        'produk_id' => $item['produk_id'],
-                        'jumlah_produk' => $item['jumlah'],
-                        'subtotal' => $item['subtotal']
-                    ]);
+                $jumlahTransaksi = Penjualan::whereDate('tanggal_penjualan', $currentDateCek)->count() + 1;
 
-                    $produk = Produk::find($item['produk_id']);
-                    if ($produk) {
-                        // Kurangi stok produk
-                        $produk->stok -= $item['jumlah'];
-                        $produk->save();
+                $penjualanId = $currentDate . str_pad($jumlahTransaksi, 3, '0', STR_PAD_LEFT);
+
+                $penjualan = Penjualan::create([
+                    'penjualan_id' => $penjualanId,
+                    'tanggal_penjualan'  => Carbon::now(),
+                    'total_harga' => $total,
+                    'pelanggan_id' => $pelangganId,
+                    'user_id' => $userId,
+                ]);
+
+                if ($penjualan) {
+                    $penjualanId = $penjualan->penjualan_id;
+
+                    foreach ($keranjang as $item) {
+                        $detailPenjualan = DetailPenjualan::create([
+                            'penjualan_id' => $penjualanId,
+                            'produk_id' => $item['produk_id'],
+                            'jumlah_produk' => $item['jumlah'],
+                            'subtotal' => $item['subtotal']
+                        ]);
+
+                        $produk = Produk::find($item['produk_id']);
+                        if ($produk) {
+                            // Kurangi stok produk
+                            $produk->stok -= $item['jumlah'];
+                            $produk->save();
+                        }
+                    }
+
+                    if ($detailPenjualan && $produk) {
+                        Session::forget('keranjang');
+                        return redirect()->route('keranjang.struk', ['id_penjualan' => $penjualanId]);
                     }
                 }
-
-                if ($detailPenjualan) {
-
-                    Session::forget('keranjang');
-                    return redirect()->route('keranjang.struk', ['id_penjualan' => $penjualanId]);
-                }
             }
+        }else{
+            Session::forget('keranjang');
+            return redirect()->route('home')->with('error','Transaksi gagal, keranjang kosong.');
         }
+
+
     }
 }
