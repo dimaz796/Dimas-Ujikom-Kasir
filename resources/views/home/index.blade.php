@@ -115,7 +115,7 @@
                     },
                     success: function(response) {
                         if (response.status === 'success') {
-
+                            alert(response.message);
                             // Update keranjang
                             $('#keranjang-list').html(response.keranjang);
 
