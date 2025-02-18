@@ -25,7 +25,7 @@
 <div class="container mx-auto p-3">
 
     <div class="row">
-        <div class="col-8" id="print-controls">
+        <div class="col-lg-8 col-md-12" id="print-controls">
             <div class="card">
                 <div class="p-3">
                     <h2 class="text-2xl font-semibold mb-4">Laporan Transaksi : {{$namaBulan }} - {{ $selectedYear }}</h2>
@@ -36,30 +36,34 @@
             </div>
         </div>
 
-        <div class="col-4" id="print-controls">
-            <div class="card">
-                <div class="p-3">
-                    <span class=" text-xl p-3 text-blue-500 fw-semibold">Total Pendapatan</span>
-                    <h2 class="fw-bold text-xxl ps-3">Rp {{ number_format($totalSemuaTransaksi, 0, ',', '.') }}</h2>
-                </div>
-            </div>
-
-            <div class="card mt-3">
-                <div class="p-3">
-                    <div class="row">
-                        <div class="col-12">
-                            <span class=" p-3 text-2xl fw-semibold"> Cetak Laporan</span>
+        <div class="col-lg-4 col-md-12" id="print-controls">
+            <div class="row">
+                <div class="col-lg-12 col-md-6">
+                    <div class="card">
+                        <div class="p-3">
+                            <span class=" text-xl p-3 text-blue-500 fw-semibold">Total Pendapatan</span>
+                            <h2 class="fw-bold text-xxl ps-3">Rp {{ number_format($totalSemuaTransaksi, 0, ',', '.') }}</h2>
                         </div>
-                        <div class="col-12">
-                            <div class="p-3">
-                                <button class="btn btn-primary w-full mb-2" onclick="window.print()"><span class="font-semibold">Print</span></button>
-                                <button class="btn btn-danger w-full mb-2" onclick="window.location.href='{{ route('transaksi.exportToPDF', ['bulan' => $selectedMonth, 'tahun' => $selectedYear]) }}'"><span class="font-semibold">PDF</span></button>
-                                <button class="btn btn-success w-full" onclick="window.location.href='{{ route('transaksi.exportToExcel', ['bulan' => $selectedMonth, 'tahun' => $selectedYear]) }}'"><span class="font-semibold">Excel</span></button>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-6">
+                    <div class="card mt-3">
+                        <div class="p-3">
+                            <div class="row">
+                                <div class="col-12">
+                                    <span class=" p-3 text-2xl fw-semibold"> Cetak Laporan</span>
+                                </div>
+                                <div class="col-12">
+                                    <div class="p-3">
+                                        <button class="btn btn-primary w-full mb-2" onclick="window.print()"><span class="font-semibold">Print</span></button>
+                                        <button class="btn btn-danger w-full mb-2" onclick="window.location.href='{{ route('transaksi.exportToPDF', ['bulan' => $selectedMonth, 'tahun' => $selectedYear]) }}'"><span class="font-semibold">PDF</span></button>
+                                        {{-- <button class="btn btn-success w-full" onclick="window.location.href='{{ route('transaksi.exportToExcel', ['bulan' => $selectedMonth, 'tahun' => $selectedYear]) }}'"><span class="font-semibold">Excel</span></button> --}}
+                                    </div>
+                                </div>
+        
                             </div>
                         </div>
-
                     </div>
-
                 </div>
             </div>
         </div>

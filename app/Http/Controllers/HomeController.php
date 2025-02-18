@@ -14,7 +14,8 @@ class HomeController extends Controller
     {
         $search = $request->input('search', '');
 
-        $items = Produk::where('nama_produk', 'like', "%{$search}%")
+        $items = Produk::where('status','active')
+                    ->where('nama_produk', 'like', "%{$search}%")
             ->where('stok', '>=', 1)
             ->oldest()
             ->paginate(10);
@@ -22,7 +23,7 @@ class HomeController extends Controller
         $jumlahKeranjang = count($keranjang);
 
         $produkIds = array_keys($keranjang);
-        $produk = Produk::whereIn('produk_id', $produkIds)->get();
+        $produk = Produk::where('status','active')->whereIn('produk_id', $produkIds)->get();
 
         return view('home.index', compact('items', 'jumlahKeranjang', 'produk'));
     }

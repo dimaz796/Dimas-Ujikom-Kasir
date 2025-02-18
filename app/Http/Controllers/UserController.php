@@ -15,14 +15,16 @@ class UserController extends Controller
             return redirect()->route('user');
         }
 
-        $user = User::where('name', 'like', '%' . $search . '%')->oldest()->paginate(10);
+        $user = User::where('status','active')
+                     ->where('name', 'like', '%' . $search . '%')->oldest()->paginate(10);
 
         return view('user.index', compact('user'));
     }
 
     public function index()
     {
-        $user = User::orderBy('created_at', 'asc')->paginate(10);
+        $user = User::where('status','active')
+                     ->orderBy('created_at', 'asc')->paginate(10);
 
         return view('user.index', compact('user'));
     }
@@ -95,8 +97,9 @@ class UserController extends Controller
     public function delete($id)
     {
         $user = User::findOrFail($id);
-        $user->delete();
+        $user->status = 'inactive';
+        $user->save();
 
-        return redirect()->route('user')->with('success', 'Pernghapusan Berhasil Dilakukan');
+        return redirect()->route('user')->with('success', 'Penghapusan Berhasil Dilakukan');
     }
 }

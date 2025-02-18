@@ -10,11 +10,11 @@
 </head>
 <body class="bg-gray-100 flex flex-col min-h-screen">
     <!-- Navbar -->
-    <nav class="bg-white">
+    <nav class=" bg-white top-0 left-0 w-full z-50 shadow-md">
         @include('component.navbar')
     </nav>
 
-    <!-- Wrapper agar konten mengisi ruang kosong -->
+    <!-- Wrapper agar konten mengisi ruang kosong dengan margin atas untuk navbar yang fixed -->
     <main class="flex-grow container my-4">
         @yield('content')
     </main>
@@ -29,5 +29,15 @@
     <script src="{{ asset('js/keranjang.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function confirmDelete(id,ket) {
+            if (confirm("Apakah Anda Yakin Ingin Menghapus " + ket + " Ini?")) {
+            // Jika ya, kirim form
+            document.getElementById('delete-form-' + id).submit();
+            } else {
+                event.preventDefault();
+            }
+        }
+    </script>
 </body>
 </html>

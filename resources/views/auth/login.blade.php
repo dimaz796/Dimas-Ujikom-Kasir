@@ -11,6 +11,12 @@
 
   <!-- Login component -->
   <div class="flex shadow-md">
+
+     <!-- Login banner -->
+    <div class="flex flex-wrap content-center bg-cover justify-center rounded-r-md overflow-hidden" style="width: 45rem; height: 32rem;">
+      <img class="w-full h-full object-cover rounded-r-md transition-transform duration-300 ease-in-out hover:scale-110" 
+           src="{{ asset('storage/component/login.jpg') }}">
+    </div>
     <!-- Login form -->
     <div class="flex flex-wrap content-center justify-center rounded-l-md bg-white" style="width: 24rem; height: 32rem;">
       <div class="w-72">
@@ -43,11 +49,7 @@
       </div>
     </div>
 
-    <!-- Login banner -->
-    <div class="flex flex-wrap content-center bg-cover justify-center rounded-r-md overflow-hidden" style="width: 45rem; height: 32rem;">
-      <img class="w-full h-full object-cover rounded-r-md transition-transform duration-300 ease-in-out hover:scale-110" 
-           src="{{ asset('storage/component/login.jpg') }}">
-    </div>
+   
     
 
   </div>

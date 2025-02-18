@@ -17,7 +17,9 @@ return new class extends Migration
             $table->integer('harga');
             $table->integer('stok');
             $table->string('foto')->nullable();
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

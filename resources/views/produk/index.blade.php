@@ -89,10 +89,10 @@
                     </td>
                     <td>
                         <a href="{{ route('produk.edit', ['id' => $item->produk_id]) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ route('produk.delete', ['id' => $item->produk_id]) }}" method="POST" style="display:inline;">
+                        <form action="{{ route('produk.delete', ['id' => $item->produk_id]) }}" id="delete-form-{{ $item->produk_id }}"  method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                            <button type="submit" onclick="confirmDelete({{ $item->produk_id }},'Produk')" class="btn btn-danger btn-sm">Hapus</button>
                         </form>
                     </td>
                 </tr>

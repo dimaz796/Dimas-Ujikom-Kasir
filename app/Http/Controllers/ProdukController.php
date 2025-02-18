@@ -17,16 +17,19 @@ class ProdukController extends Controller
             return redirect()->route('produk');
         }
 
-        $produk = Produk::where('nama_produk', 'like', '%' . $search . '%')->oldest()->paginate(10);
+        $produk = Produk::where('status','active')
+                         ->where('nama_produk', 'like', '%' . $search . '%')->oldest()->paginate(10);
 
-        $cekStok = Produk::where('stok', '<', 25)->get()->count();
+        $cekStok = Produk::where('status','active')
+                        ->where('stok', '<', 25)->get()->count();
 
         return view('produk.index', compact('produk','cekStok'));
     }
 
     public function restock(Request $request)
     {
-        $produk = Produk::where('stok', '<', 25)->paginate(10);
+        $produk = Produk::where('status','active')
+                        ->where('stok', '<', 25)->paginate(10);
 
         $cekStok = $produk->count();
 
@@ -36,10 +39,11 @@ class ProdukController extends Controller
 
     public function index()
     {
-        $produk = Produk::oldest()->paginate(10);
+        $produk = Produk::where('status','active')->oldest()->paginate(10);
         
 
-        $cekStok = Produk::where('stok', '<', 25)->get()->count();
+        $cekStok = Produk::where('status','active')
+                            ->where('stok', '<', 25)->get()->count();
 
         return view('produk.index', compact('produk','cekStok'));
     }
@@ -119,7 +123,8 @@ class ProdukController extends Controller
     public function delete($id)
     {
         $produk = Produk::findOrFail($id);
-        $produk->delete();
+        $produk->status = 'inactive';
+        $produk->save();
 
         return redirect('/produk')->with('success','Produk Berhasil Dihapus!');
     }

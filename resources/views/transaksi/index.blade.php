@@ -12,34 +12,38 @@
                     <h1 class="text-3xl font-bold text-center mb-6">Data Penjualan</h1>
                     <hr class="mb-6">
                     <div class="row">
-                        <div class="col-9">
-                            <form method="GET" action="{{ route('transaksi') }}" class="mb-4 flex items-center gap-3">
-                                <div class="flex items-center space-x-2">
-                                    <input type="date" id="start_date" name="start_date" value="{{ old('start_date', request('end_date')) }}"
-                                        class="border border-gray-300 rounded-lg px-3 py-1 text-gray-700 text-sm w-32 focus:ring-2 focus:ring-blue-500 transition duration-150">
+                        <div class="col-12 col-md-9">
+                            <form method="GET" action="{{ route('transaksi') }}" class="mb-4 d-flex flex-column flex-md-row gap-3">
+                                <div class="d-flex flex-column flex-md-row align-items-start gap-2">
+                                    <input placeholder="" type="date" id="start_date" name="start_date" value="{{ old('start_date', request('end_date')) }}"
+                                        class="form-control form-control-sm w-100 w-md-32">
                                 </div>
+                                
+                                <div class="d-flex flex-column flex-md-row align-items-start gap-2">
+                                    <label for="end_date" class="text-gray-700 text-sm fw-bold"> - </label>
 
-                                <div class="flex items-center space-x-2">
-                                    <label for="end_date" class="text-gray-700 text-sm"> - </label>
+                                </div>
+                        
+                                <div class="d-flex flex-column flex-md-row align-items-start gap-2">
                                     <input type="date" id="end_date" name="end_date" value="{{ old('end_date', request('end_date')) }}"
-                                        class="border border-gray-300 rounded-lg px-3 py-1 text-gray-700 text-sm w-32 focus:ring-2 focus:ring-blue-500 transition duration-150">
+                                        class="form-control form-control-sm w-100 w-md-32">
                                 </div>
-
-                                <button type="submit" class="bg-blue-600 text-white px-4 py-1 rounded-lg text-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        
+                                <button type="submit" class="btn btn-primary btn-sm">
                                     Filter
                                 </button>
                             </form>
-                        </div>
-                        <div class="col-3">
-                            <div class="d-flex justify-content-end">
+                        </div>                        
+                        <div class="col-12 col-md-12 col-lg-3">
+                            <div class="d-flex justify-content-md-start justify-content-lg-end">
                                 <a href="{{ ($startDate || $endDate) && !$isDisabled && !$transaksi->isEmpty() ? route('transaksi.printPDF', ['start_date' => $startDate, 'end_date' => $endDate]) : '#' }}"
                                     class="no-underline bg-red-600 text-white px-4 py-1 rounded-lg text-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-blue-500 
                                     {{ !($startDate || $endDate) || $isDisabled || $transaksi->isEmpty() ? 'cursor-not-allowed opacity-50 pointer-events-none' : '' }}">
                                     Print PDF
                                 </a>
-                                                             
                             </div>
                         </div>
+                        
                     </div>
                     @if(session('error'))
                         <div class="alert alert-danger">
@@ -48,8 +52,8 @@
                     @endif
 
                     <!-- Detail Penjualan -->
-                    <div>
-                        <table class="w-full table-auto border-collapse border border-gray-300">
+                    <div class="mt-3 overflow-x-auto">
+                        <table class="w-full table-auto border-collapse border border-gray-300 ">
                             <thead class="bg-gray-100">
                                 <tr>
                                     <th class="px-4 py-2 border border-gray-300 text-center">No Transaksi</th>
