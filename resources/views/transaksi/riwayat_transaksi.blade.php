@@ -12,22 +12,26 @@
                     <h1 class="text-3xl font-bold text-center mb-6">Riwayat Transaksi :  {{ auth()->user()->name }}</h1>
                     <hr class="mb-6">
  
-                            <form method="GET" action="{{ route('riwayat_transaksi') }}" class="mb-4 flex items-center gap-3">
-                                <div class="flex items-center space-x-2">
-                                    <input type="date" id="start_date" name="start_date" value="{{ old('start_date', request('end_date')) }}"
-                                        class="border border-gray-300 rounded-lg px-3 py-1 text-gray-700 text-sm w-32 focus:ring-2 focus:ring-blue-500 transition duration-150">
-                                </div>
+                        <form method="GET" action="{{ route('transaksi') }}" class="mb-4 d-flex flex-column flex-md-row gap-3">
+                            <div class="d-flex flex-column flex-md-row align-items-start gap-2">
+                                <input placeholder="" type="date" id="start_date" name="start_date" value="{{ old('start_date', request('end_date')) }}"
+                                    class="form-control form-control-sm w-100 w-md-32">
+                            </div>
+                            
+                            <div class="d-flex flex-column flex-md-row align-items-start gap-2">
+                                <label for="end_date" class="text-gray-700 text-sm fw-bold"> - </label>
 
-                                <div class="flex items-center space-x-2">
-                                    <label for="end_date" class="text-gray-700 text-sm"> - </label>
-                                    <input type="date" id="end_date" name="end_date" value="{{ old('end_date', request('end_date')) }}"
-                                        class="border border-gray-300 rounded-lg px-3 py-1 text-gray-700 text-sm w-32 focus:ring-2 focus:ring-blue-500 transition duration-150">
-                                </div>
-
-                                <button type="submit" class="bg-blue-600 text-white px-4 py-1 rounded-lg text-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    Filter
-                                </button>
-                            </form>
+                            </div>
+                    
+                            <div class="d-flex flex-column flex-md-row align-items-start gap-2">
+                                <input type="date" id="end_date" name="end_date" value="{{ old('end_date', request('end_date')) }}"
+                                    class="form-control form-control-sm w-100 w-md-32">
+                            </div>
+                    
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                Filter
+                            </button>
+                        </form>
 
                     @if(session('error'))
                         <div class="alert alert-danger">
@@ -36,7 +40,7 @@
                     @endif
 
                     <!-- Detail Penjualan -->
-                    <div>
+                    <div class="overflow-x-auto">
                         <table class="w-full table-auto border-collapse border border-gray-300">
                             <thead class="bg-gray-100">
                                 <tr>
