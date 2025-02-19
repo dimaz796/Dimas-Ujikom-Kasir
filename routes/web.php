@@ -25,6 +25,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/keranjang/hapus', [CartController::class, 'hapusProduk'])->name('keranjang.hapus');
     Route::post('/keranjang/pembayaran', [CartController::class, 'pembayaran'])->name('keranjang.pembayaran');
     Route::get('/keranjang/struk', [CartController::class, 'struk'])->name('keranjang.struk');
+    Route::get('/cari-pelanggan/{id}', [CartController::class, 'cariPelanggan']);
 
 
     // Produk

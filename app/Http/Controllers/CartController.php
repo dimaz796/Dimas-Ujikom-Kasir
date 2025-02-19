@@ -125,76 +125,100 @@ class CartController extends Controller
     }
 
     public function pembayaran(Request $request)
-{
-    $userId = auth()->user()->user_id;
-    $namaPelanggan = $request->input('nama_pelanggan');
-    $alamatPelanggan = $request->input('alamat_pelanggan');
-    $nomorTelepon = $request->input('nomor_telepon');
-    $nominalPembayaran = $request->input('nominal_pembayaran');  // Ambil nilai nominal pembayaran
+    {
+        $userId = auth()->user()->user_id;
+        if ($request->filled('pelanggan_id')) {
+            $pelanggan = Pelanggan::where('id', $request->pelanggan_id)->first();
+            if ($pelanggan) {
+                $namaPelanggan = $pelanggan->nama_pelanggan;
+                $alamatPelanggan = $pelanggan->alamat_pelanggan;
+                $nomor_telepon = $pelanggan->nomor_telepon;
+            }
+        } else {
+            $namaPelanggan = $request->nama_pelanggan;
+            $alamatPelanggan = $request->alamat_pelanggan;
+            $nomorTelepon = $request->nomor_telepon;
 
-    $keranjang = session('keranjang', []);
+            $pelanggan = Pelanggan::create([
+                'nama_pelanggan' => $namaPelanggan,
+                'alamat_pelanggan' => $alamatPelanggan,
+                'nomor_telepon' => $nomorTelepon
+            ]);
+        }
+        $nominalPembayaran = $request->input('nominal_pembayaran');  // Ambil nilai nominal pembayaran
 
-    // Hitung total harga dari keranjang
-    $nilai_subtotal = array_column($keranjang, 'subtotal');
-    $total = array_sum($nilai_subtotal);
+        $keranjang = session('keranjang', []);
 
-    if ($nominalPembayaran < $total) {
-        return redirect()->back()->with('error', 'Uang anda kurang. Silakan masukkan jumlah yang cukup.')
-            ->withInput();
-    }
+        // Hitung total harga dari keranjang
+        $nilai_subtotal = array_column($keranjang, 'subtotal');
+        $total = array_sum($nilai_subtotal);
 
-    $pelanggan = Pelanggan::create([
-        'nama_pelanggan' => $namaPelanggan,
-        'alamat_pelanggan' => $alamatPelanggan,
-        'nomor_telepon' => $nomorTelepon
-    ]);
+        if ($nominalPembayaran < $total) {
+            return redirect()->back()->with('error', 'Uang anda kurang. Silakan masukkan jumlah yang cukup.')
+                ->withInput();
+        }
 
-    if ($pelanggan) {
-        $pelangganId = $pelanggan->pelanggan_id;
+        
+        if ($pelanggan) {
+            $pelangganId = $pelanggan->pelanggan_id;
 
-        $currentDateCek = Carbon::now()->toDateString();
-        $jumlahTransaksi = Penjualan::whereDate('tanggal_penjualan', $currentDateCek)->count() + 1;
-        $penjualanId = Carbon::now()->format('dmY') . str_pad($jumlahTransaksi, 3, '0', STR_PAD_LEFT);
+            $currentDateCek = Carbon::now()->toDateString();
+            $jumlahTransaksi = Penjualan::whereDate('tanggal_penjualan', $currentDateCek)->count() + 1;
+            $penjualanId = Carbon::now()->format('dmY') . str_pad($jumlahTransaksi, 3, '0', STR_PAD_LEFT);
 
-        $penjualan = Penjualan::create([
-            'penjualan_id' => $penjualanId,
-            'tanggal_penjualan'  => Carbon::now(),
-            'total_harga' => $total,
-            'pelanggan_id' => $pelangganId,
-            'user_id' => $userId,
-            'nominal_pembayaran' => $nominalPembayaran,
-            'kembalian' => $nominalPembayaran - $total,
-        ]);
+            $penjualan = Penjualan::create([
+                'penjualan_id' => $penjualanId,
+                'tanggal_penjualan'  => Carbon::now(),
+                'total_harga' => $total,
+                'pelanggan_id' => $pelangganId,
+                'user_id' => $userId,
+                'nominal_pembayaran' => $nominalPembayaran,
+                'kembalian' => $nominalPembayaran - $total,
+            ]);
 
-        if ($penjualan) {
-            $penjualanId = $penjualan->penjualan_id;
+            if ($penjualan) {
+                $penjualanId = $penjualan->penjualan_id;
 
-            foreach ($keranjang as $item) {
-                $detailPenjualan = DetailPenjualan::create([
-                    'penjualan_id' => $penjualanId,
-                    'produk_id' => $item['produk_id'],
-                    'jumlah_produk' => $item['jumlah'],
-                    'subtotal' => $item['subtotal']
-                ]);
+                foreach ($keranjang as $item) {
+                    $detailPenjualan = DetailPenjualan::create([
+                        'penjualan_id' => $penjualanId,
+                        'produk_id' => $item['produk_id'],
+                        'jumlah_produk' => $item['jumlah'],
+                        'subtotal' => $item['subtotal']
+                    ]);
 
-                $produk = Produk::find($item['produk_id']);
-                if ($produk) {
-                    // Kurangi stok produk
-                    $produk->stok -= $item['jumlah'];
-                    $produk->save();
+                    $produk = Produk::find($item['produk_id']);
+                    if ($produk) {
+                        // Kurangi stok produk
+                        $produk->stok -= $item['jumlah'];
+                        $produk->save();
+                    }
+                }
+
+                if ($detailPenjualan && $produk) {
+                    Session::forget('keranjang');
+                    return redirect()->route('keranjang.struk', ['id_penjualan' => $penjualanId]);
                 }
             }
-
-            if ($detailPenjualan && $produk) {
-                Session::forget('keranjang');
-                return redirect()->route('keranjang.struk', ['id_penjualan' => $penjualanId]);
-            }
+        } else {
+            // Jika tidak ada pelanggan
+            Session::forget('keranjang');
+            return redirect()->route('home')->with('error', 'Transaksi gagal, keranjang kosong.');
         }
-    } else {
-        // Jika tidak ada pelanggan
-        Session::forget('keranjang');
-        return redirect()->route('home')->with('error', 'Transaksi gagal, keranjang kosong.');
     }
-}
+
+    public function cariPelanggan($id)
+    {
+        $pelanggan = Pelanggan::where('pelanggan_id', $id)->first();
+
+        if ($pelanggan) {
+            return response()->json([
+                'success' => true,
+                'pelanggan' => $pelanggan
+            ]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
 
 }

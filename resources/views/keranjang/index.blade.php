@@ -119,26 +119,59 @@
                     <form action="{{ route('keranjang.pembayaran') }}" method="POST">
                         @csrf
                         <div class="fw-semibold">Data Pelanggan</div>
-                        <div class="py-1">
-                            <input type="text" class="form-control" placeholder="Nama Pelanggan" name="nama_pelanggan" required value="{{ old('nama_pelanggan') }}">
+                    
+                        <!-- Switch Member/Non-Member -->
+                        <div class="form-check form-switch py-1">
+                            <input class="form-check-input" type="checkbox" id="isMemberSwitch">
+                            <label class="form-check-label" for="isMemberSwitch">Member</label>
                         </div>
-                        <div class="py-1">
-                            <input type="text" class="form-control" placeholder="Alamat" name="alamat_pelanggan" required value="{{ old('alamat_pelanggan') }}">
-                        </div>
-                        <div class="py-1">
-                            <input type="number" class="form-control" placeholder="No Telephon" name="nomor_telepon" required value="{{ old('nomor_telepon') }}">
+                    
+                        <!-- Form untuk Non-Member -->
+                        <div id="nonMemberFields">
+                            <div class="py-1">
+                                <input type="text" class="form-control" placeholder="Nama Pelanggan" name="nama_pelanggan" required>
+                            </div>
+                            <div class="py-1">
+                                <input type="text" class="form-control" placeholder="Alamat" name="alamat_pelanggan" required>
+                            </div>
+                            <div class="py-1">
+                                <input type="number" class="form-control" placeholder="No Telepon" name="nomor_telepon" required>
+                            </div>
                         </div>
 
+                    
+                        <!-- Form untuk Member -->
+                        <div id="memberFields" class="hidden">
+                            <div class="py-1">
+                                <input type="text" class="form-control"  id="pelanggan_id" placeholder="ID Pelanggan" name="pelanggan_id" value="{{ old('pelanggan_id') }}">
+                            </div>
+                            <div class="py-1">
+                                <button type="button" class="btn btn-secondary" id="verifyMember">Cari Pelanggan</button>
+                            </div>
+
+                            <div id="memberData" class="hidden">
+                                <div class="py-1">
+                                    <input type="text" class="form-control" id="nama_pelanggan" name="nama_pelanggan_member" placeholder="Nama Pelanggan" readonly>
+                                </div>
+                                <div class="py-1">
+                                    <input type="text" class="form-control" id="alamat_pelanggan" name="alamat_pelanggan_member" placeholder="Alamat" readonly>
+                                </div>
+                                <div class="py-1">
+                                    <input type="number" class="form-control" id="nomor_telepon" name="nomor_telepon_member" placeholder="No Telepon" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    
                         @if (session('error'))
                             <div class="text-red-600">
                                 {{ session('error') }}
                             </div>
                         @endif
-
+                    
                         <div class="py-1">
                             <input type="number" class="form-control" placeholder="Nominal Pembayaran" name="nominal_pembayaran" required value="{{ old('nominal_pembayaran') }}">
                         </div>
-
+                    
                         <div class="flex items-center justify-between p-1">
                             <div class="flex-initial">
                                 <button class="btn btn-primary" {{ $keranjang ? '' : 'disabled' }}>Bayar Sekarang</button>
@@ -161,6 +194,55 @@
     <script>
         $(document).ready(function() {
 
+            document.querySelector("form").addEventListener("submit", function(event) {
+            let nama = document.querySelector("input[name='nama_pelanggan']").value;
+            let alamat = document.querySelector("input[name='alamat_pelanggan']").value;
+            let telepon = document.querySelector("input[name='nomor_telepon']").value;
+
+            console.log("Nama:", nama);
+            console.log("Alamat:", alamat);
+            console.log("No Telepon:", telepon);
+        });
+            const isMemberSwitch = document.getElementById("isMemberSwitch");
+            const memberFields = document.getElementById("memberFields");
+            const nonMemberFields = document.getElementById("nonMemberFields");
+            const verifyMemberBtn = document.getElementById("verifyMember");
+            const memberData = document.getElementById("memberData");
+
+            isMemberSwitch.addEventListener("change", function () {
+                if (this.checked) {
+                    memberFields.classList.remove("hidden");
+                    nonMemberFields.classList.add("hidden");
+                } else {
+                    memberFields.classList.add("hidden");
+                    nonMemberFields.classList.remove("hidden");
+                }
+            });
+
+            verifyMemberBtn.addEventListener("click", function () {
+                const pelangganId = document.getElementById("pelanggan_id").value;
+
+                if (!pelangganId) {
+                    alert("Masukkan ID Pelanggan terlebih dahulu!");
+                    return;
+                }
+
+                fetch(`/cari-pelanggan/${pelangganId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(response);
+                        if (data.success) {
+                            document.getElementById("nama_pelanggan").value = data.pelanggan.nama_pelanggan;
+                            document.getElementById("alamat_pelanggan").value = data.pelanggan.alamat_pelanggan;
+                            document.getElementById("nomor_telepon").value = data.pelanggan.nomor_telepon;
+
+                            memberData.classList.remove("hidden"); // Tampilkan data pelanggan
+                        } else {
+                            alert("Pelanggan tidak ditemukan!");
+                        }
+                    })
+                    .catch(error => console.error("Terjadi kesalahan:", error));
+            });
             $('button[data-id][data-stok]').on('click', function() {
                 var produkId = $(this).data('id');
                 var stok = $(this).data('stok');

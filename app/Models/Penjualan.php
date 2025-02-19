@@ -22,10 +22,10 @@ class Penjualan extends Model
         'kembalian'
     ];
 
-    public function pelanggan()
-    {
-        return $this->belongsTo(Pelanggan::class, 'pelanggan_id');
-    }
+    // public function pelanggan()
+    // {
+    //     return $this->belongsTo(Pelanggan::class, 'pelanggan_id');
+    // }
 
     public function user()
     {

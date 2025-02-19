@@ -19,8 +19,8 @@ class Pelanggan extends Model
         'nomor_telepon',
     ];
 
-    public function penjualans()
-    {
-        return $this->hasMany(Penjualan::class);
-    }
+    // public function penjualans()
+    // {
+    //     return $this->hasMany(Penjualan::class);
+    // }
 }
