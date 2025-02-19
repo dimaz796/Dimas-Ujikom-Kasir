@@ -114,7 +114,7 @@
                     <tr>
                         @if ($key == 0) <!-- Apply rowspan only for the first row -->
                             <td rowspan="{{ $detailCount }}">{{ $item->penjualan_id }}</td>
-                            <td rowspan="{{ $detailCount }}">{{ $item->pelanggan->nama_pelanggan }}</td>
+                            <td rowspan="{{ $detailCount }}">{{ $item->pelanggan->nama_pelanggan?? '-' }}</td>
                             <td rowspan="{{ $detailCount }}">{{ Carbon\Carbon::parse($item->tanggal_penjualan)->translatedFormat('j, F Y') }}</td>
                             <td rowspan="{{ $detailCount }}">{{ $item->user->name }}</td>
                          @endif

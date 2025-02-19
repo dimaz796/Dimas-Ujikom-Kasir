@@ -105,30 +105,13 @@ class CartController extends Controller
         ]);
     }
 
-    public function struk(Request $request)
-    {
-        $penjualan_id = $request->input('id_penjualan');
-
-        $penjualan = Penjualan::with(['pelanggan', 'detailPenjualan.produk'])
-            ->where('penjualan_id', $penjualan_id)
-            ->first();
-
-        if (!$penjualan) {
-            return redirect()->back()->withErrors('Data penjualan tidak ditemukan.');
-        }
-
-        return view('keranjang.struk', [
-            'penjualan' => $penjualan,
-            'pelanggan' => $penjualan->pelanggan,
-            'detailPenjualan' => $penjualan->detailPenjualan,
-        ]);
-    }
+    
 
     public function pembayaran(Request $request)
     {
         $userId = auth()->user()->user_id;
         if ($request->filled('pelanggan_id')) {
-            $pelanggan = Pelanggan::where('id', $request->pelanggan_id)->first();
+            $pelanggan = Pelanggan::where('pelanggan_id', $request->pelanggan_id)->first();
             if ($pelanggan) {
                 $namaPelanggan = $pelanggan->nama_pelanggan;
                 $alamatPelanggan = $pelanggan->alamat_pelanggan;
@@ -139,11 +122,16 @@ class CartController extends Controller
             $alamatPelanggan = $request->alamat_pelanggan;
             $nomorTelepon = $request->nomor_telepon;
 
-            $pelanggan = Pelanggan::create([
-                'nama_pelanggan' => $namaPelanggan,
-                'alamat_pelanggan' => $alamatPelanggan,
-                'nomor_telepon' => $nomorTelepon
-            ]);
+            if (!empty($namaPelanggan) && !empty($alamatPelanggan) && !empty($nomorTelepon)) {
+                $pelanggan = Pelanggan::create([
+                    'nama_pelanggan' => $namaPelanggan,
+                    'alamat_pelanggan' => $alamatPelanggan,
+                    'nomor_telepon' => $nomorTelepon
+                ]);
+            } else {
+                $pelanggan = null;
+            }
+
         }
         $nominalPembayaran = $request->input('nominal_pembayaran');  // Ambil nilai nominal pembayaran
 
@@ -154,13 +142,14 @@ class CartController extends Controller
         $total = array_sum($nilai_subtotal);
 
         if ($nominalPembayaran < $total) {
-            return redirect()->back()->with('error', 'Uang anda kurang. Silakan masukkan jumlah yang cukup.')
+            return redirect()->back()->with('error', 'Uang anda kurang.')
                 ->withInput();
         }
 
         
-        if ($pelanggan) {
-            $pelangganId = $pelanggan->pelanggan_id;
+        if ($keranjang) {
+            $pelangganId = $pelanggan?->pelanggan_id;
+
 
             $currentDateCek = Carbon::now()->toDateString();
             $jumlahTransaksi = Penjualan::whereDate('tanggal_penjualan', $currentDateCek)->count() + 1;
@@ -205,6 +194,26 @@ class CartController extends Controller
             Session::forget('keranjang');
             return redirect()->route('home')->with('error', 'Transaksi gagal, keranjang kosong.');
         }
+    }
+
+    public function struk(Request $request)
+    {
+        $penjualan_id = $request->input('id_penjualan');
+
+        $penjualan = Penjualan::with(['pelanggan', 'detailPenjualan.produk','user'])
+            ->where('penjualan_id', $penjualan_id)
+            ->first();
+
+        if (!$penjualan) {
+            return redirect()->back()->withErrors('Data penjualan tidak ditemukan.');
+        }
+
+        return view('keranjang.struk', [
+            'penjualan' => $penjualan,
+            'pelanggan' => $penjualan->pelanggan,
+            'pelanggan' => $penjualan->user,
+            'detailPenjualan' => $penjualan->detailPenjualan,
+        ]);
     }
 
     public function cariPelanggan($id)

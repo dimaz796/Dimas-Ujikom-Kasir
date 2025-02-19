@@ -64,7 +64,7 @@
                                     @foreach ($transaksi as $item)
                                         <tr class="hover:bg-gray-50">
                                             <td class="px-4 py-2 border border-gray-300 text-center">{{ $item->penjualan_id }}</td>
-                                            <td class="px-4 py-2 border border-gray-300">{{ $item->pelanggan->nama_pelanggan }}</td>
+                                            <td class="px-4 py-2 border border-gray-300">{{ $item->pelanggan->nama_pelanggan?? '-' }}</td>
                                             <td class="px-4 py-2 border border-gray-300 text-center">
                                                 {{ \Carbon\Carbon::parse($item->tanggal_penjualan)->translatedFormat('j, F Y') }}
                                             </td>

@@ -129,13 +129,13 @@
                         <!-- Form untuk Non-Member -->
                         <div id="nonMemberFields">
                             <div class="py-1">
-                                <input type="text" class="form-control" placeholder="Nama Pelanggan" name="nama_pelanggan" required>
+                                <input type="text" class="form-control" placeholder="Nama Pelanggan" name="nama_pelanggan" >
                             </div>
                             <div class="py-1">
-                                <input type="text" class="form-control" placeholder="Alamat" name="alamat_pelanggan" required>
+                                <input type="text" class="form-control" placeholder="Alamat" name="alamat_pelanggan" >
                             </div>
                             <div class="py-1">
-                                <input type="number" class="form-control" placeholder="No Telepon" name="nomor_telepon" required>
+                                <input type="number" class="form-control" placeholder="No Telepon" name="nomor_telepon" >
                             </div>
                         </div>
 
@@ -161,16 +161,16 @@
                                 </div>
                             </div>
                         </div>
+                        
                     
+                        <div class="py-1">
+                            <input type="number" class="form-control" placeholder="Nominal Pembayaran" name="nominal_pembayaran" required value="{{ old('nominal_pembayaran') }}">
+                        </div>
                         @if (session('error'))
                             <div class="text-red-600">
                                 {{ session('error') }}
                             </div>
                         @endif
-                    
-                        <div class="py-1">
-                            <input type="number" class="form-control" placeholder="Nominal Pembayaran" name="nominal_pembayaran" required value="{{ old('nominal_pembayaran') }}">
-                        </div>
                     
                         <div class="flex items-center justify-between p-1">
                             <div class="flex-initial">
@@ -226,11 +226,12 @@
                     alert("Masukkan ID Pelanggan terlebih dahulu!");
                     return;
                 }
+                console.log(pelangganId);
 
                 fetch(`/cari-pelanggan/${pelangganId}`)
                     .then(response => response.json())
                     .then(data => {
-                        console.log(response);
+                        console.log(data);
                         if (data.success) {
                             document.getElementById("nama_pelanggan").value = data.pelanggan.nama_pelanggan;
                             document.getElementById("alamat_pelanggan").value = data.pelanggan.alamat_pelanggan;

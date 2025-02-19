@@ -15,15 +15,15 @@
                     <div class="space-y-3">
                         <div class="grid grid-cols-3">
                             <span class="fw-medium">Nama Pelanggan</span>
-                            <span class="col-span-2 break-words">: {{ $pelanggan->nama_pelanggan }}</span>
+                            <span class="col-span-2 break-words">: {{ $pelanggan->nama_pelanggan ?? '-' }}</span>
                         </div>
                         <div class="grid grid-cols-3">
                             <span class="fw-medium">Alamat</span>
-                            <span class="col-span-2 break-words">: {{ $pelanggan->alamat_pelanggan }}</span>
+                            <span class="col-span-2 break-words">: {{ $pelanggan->alamat_pelanggan ?? '-' }}</span>
                         </div>
                         <div class="grid grid-cols-3">
                             <span class="fw-medium">Nomor Telepon</span>
-                            <span class="col-span-2">: {{ $pelanggan->nomor_telepon }}</span>
+                            <span class="col-span-2">: {{ $pelanggan->nomor_telepon?? '-' }}</span>
                         </div>
                     </div>
                 </div>
@@ -37,6 +37,10 @@
                         <div class="grid grid-cols-3">
                             <span class="fw-medium">Tanggal Penjualan</span>
                             <span class="col-span-2">: {{ $penjualan->tanggal_penjualan }}</span>
+                        </div>
+                        <div class="grid grid-cols-3">
+                            <span class="fw-medium">Kasir</span>
+                            <span class="col-span-2">: {{ $penjualan->user->name }}</span>
                         </div>
                     </div>
                 </div>
@@ -118,9 +122,7 @@
             }
             #print-area {
                 position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
+                left: 12%;
                 width: auto;
                 max-width: 80%;
                 box-shadow: none;
