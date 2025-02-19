@@ -36,12 +36,17 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        $messages = [
+            'email.unique' => 'Email sudah digunakan, coba email lain.',
+            'password.confirmed' => 'Password tidak sama, harap periksa kembali password dan konfirmasi password Anda.',
+        ];
+
         $validateData = $request->validate([
            'name' => 'required',
-           'email' => 'required|email',
+           'email' => 'required|email|unique:users,email',
            'role' => 'required',
            'password' => 'required|confirmed'
-        ]);
+        ],$messages);
 
 
         try{
@@ -67,12 +72,17 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        $messages = [
+            'email.unique' => 'Email sudah digunakan, coba email lain.',
+            'password.confirmed' => 'Password tidak sama, harap periksa kembali password dan konfirmasi password Anda.',
+        ];
+
         $validateData = $request->validate([
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email',
             'role' => 'required',
-            'password' => 'nullable|min:4|confirmed'
-        ]);
+            'password' => 'nullable|confirmed'
+        ],$messages);
 
         $user = User::findOrFail($id);
 

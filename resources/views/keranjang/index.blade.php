@@ -120,32 +120,34 @@
                         @csrf
                         <div class="fw-semibold">Data Pelanggan</div>
                         <div class="py-1">
-                            <input type="text" class="form-control" placeholder="Nama Pelanggan" name="nama_pelanggan"
-                                required>
+                            <input type="text" class="form-control" placeholder="Nama Pelanggan" name="nama_pelanggan" required value="{{ old('nama_pelanggan') }}">
                         </div>
                         <div class="py-1">
-                            <input type="text" class="form-control" placeholder="Alamat" name="alamat_pelanggan"
-                                required>
+                            <input type="text" class="form-control" placeholder="Alamat" name="alamat_pelanggan" required value="{{ old('alamat_pelanggan') }}">
                         </div>
                         <div class="py-1">
-                            <input type="number" class="form-control" placeholder="No Telephon" name="nomor_telepon"
-                                required>
+                            <input type="number" class="form-control" placeholder="No Telephon" name="nomor_telepon" required value="{{ old('nomor_telepon') }}">
                         </div>
+
+                        <!-- Input untuk nominal pembayaran -->
+                        <div class="py-1">
+                            <input type="number" class="form-control" placeholder="Nominal Pembayaran" name="nominal_pembayaran" required value="{{ old('nominal_pembayaran') }}">
+                        </div>
+
                         <div class="flex items-center justify-between p-1">
                             <div class="flex-initial">
-                                <button class="btn btn-primary" {{ $keranjang ? '' : 'disabled'  }}>Bayar Sekarang</button>
+                                <button class="btn btn-primary" {{ $keranjang ? '' : 'disabled' }}>Bayar Sekarang</button>
                             </div>
                             <div class="flex items-center">
                                 <!-- Total Harga Keranjang -->
                                 <div class="flex items-center fw-medium">
-                                    Total : <span id="total-keranjang" class="ml-2">Rp.
-                                        {{ number_format($totalKeranjang) }}</span>
+                                    Total : <span id="total-keranjang" class="ml-2">Rp. {{ number_format($totalKeranjang) }}</span>
                                 </div>
                             </div>
                         </div>
                     </form>
-
                 </div>
+
             </div>
         </div>
     </div>

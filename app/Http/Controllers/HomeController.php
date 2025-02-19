@@ -56,7 +56,7 @@ class HomeController extends Controller
             if ($jumlahDalamKeranjang >= $produk->stok) {
                 return response()->json([
                     'status' => 'info',
-                    'message' => 'Produk ini sudah ada habis, sudah ada dalam keranjang kamu.',
+                    'message' => 'Produk ini sudah habis, sudah ada dalam keranjang kamu.',
                 ]);
             }
 

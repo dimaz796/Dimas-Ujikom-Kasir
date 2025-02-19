@@ -17,6 +17,8 @@ return new class extends Migration
             $table->decimal('total_harga', 12, 2);
             $table->foreignId('pelanggan_id')->constrained('pelanggan', 'pelanggan_id');
             $table->foreignId('user_id')->constrained('users', 'user_id');
+            $table->decimal('nominal_pembayaran', 12, 2);
+            $table->decimal('kembalian', 12, 2);
             $table->timestamps();
         });
     }
