@@ -70,7 +70,7 @@
 <body>
 
     <!-- Judul dan Alamat -->
-    <h2 class="text-center title">Laporan Penjualan Samquik</h2>
+    <h2 class="text-center title">Laporan Transaksi Samquik</h2>
     <p class="address">
         {{ $alamat }}
     </p>

@@ -91,7 +91,9 @@
                         @endforelse
                     </div>
                 </div>
-
+                <div class="d-flex justify-content-end mt-3">
+                    {{ $items->links() }}
+                </div>
 
 
             </div>

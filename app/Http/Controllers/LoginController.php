@@ -24,10 +24,18 @@ class LoginController extends Controller
             'password' => $request->input('password'),
         ];
 
-        if(Auth::attempt($data)){
-            return redirect()->route('home');
-        }else{
-            Session::flash('error','Username Atau Password Salah!');
+        if (Auth::attempt($data)) {
+            $user = Auth::user();
+
+            if ($user->role === 'admin') {
+                return redirect()->route('transaksi');
+            } elseif ($user->role === 'petugas') {
+                return redirect()->route('home');
+            }
+
+            return redirect()->route('dashboard'); // Default redirect jika role tidak dikenali
+        } else {
+            Session::flash('error', 'Username atau Password Salah!');
             return redirect()->route('login');
         }
     }

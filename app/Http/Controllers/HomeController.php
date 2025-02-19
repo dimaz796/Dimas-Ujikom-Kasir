@@ -18,7 +18,7 @@ class HomeController extends Controller
                     ->where('nama_produk', 'like', "%{$search}%")
             ->where('stok', '>=', 1)
             ->oldest()
-            ->paginate(10);
+            ->paginate(8);
         $keranjang = Session::get('keranjang', []);
         $jumlahKeranjang = count($keranjang);
 

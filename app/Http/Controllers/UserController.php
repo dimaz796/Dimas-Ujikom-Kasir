@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -79,10 +80,14 @@ class UserController extends Controller
 
         $validateData = $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users,email',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore($id,'user_id'),
+            ],
             'role' => 'required',
             'password' => 'nullable|confirmed'
-        ],$messages);
+        ], $messages);
 
         $user = User::findOrFail($id);
 

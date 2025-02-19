@@ -36,7 +36,7 @@ class TransaksiController extends Controller
         } elseif ($startDate && $endDate) {
             $transaksiQuery->whereBetween('tanggal_penjualan', [$startDate, $endDate]);
         }
-        
+
         $transaksi = $transaksiQuery->get();
 
         $firstTransactionYear = Penjualan::min(DB::raw('YEAR(tanggal_penjualan)'));
@@ -52,20 +52,20 @@ class TransaksiController extends Controller
 
         $grandTotal = $transaksi->sum('total_harga');
         return view('transaksi.index', compact(
-            'transaksi', 
-            'grandTotal', 
-            'firstTransactionYear', 
-            'currentYear', 
-            'currentMonth', 
-            'distinctMonths', 
-            'startDate', 
-            'endDate', 
+            'transaksi',
+            'grandTotal',
+            'firstTransactionYear',
+            'currentYear',
+            'currentMonth',
+            'distinctMonths',
+            'startDate',
+            'endDate',
             'isDisabled'
         ));
-        
-        
+
+
     }
-    
+
 
 
     public function laporan(Request $request)
@@ -132,6 +132,7 @@ class TransaksiController extends Controller
     {
         $bulan = $request->input('bulan');
         $tahun = $request->input('tahun');
+        $bulanNama = Carbon::createFromFormat('m', $bulan)->translatedFormat('F');
 
         $startDate = Carbon::createFromFormat('Y-m', "{$tahun}-{$bulan}")->startOfMonth();
         $endDate = Carbon::createFromFormat('Y-m', "{$tahun}-{$bulan}")->endOfMonth();
@@ -146,8 +147,12 @@ class TransaksiController extends Controller
         // Menghitung Grand Total
         $grandTotal = $produkTerjual->sum('total_harga');
 
+        $alamat = "Jalan TokTok No 12";
+        $telephone = "(022) 12312341 ";
+        $tanggal = Carbon::now()->translatedFormat('j F Y');
+
         // Membuat PDF
-        $pdf = Pdf::loadView('transaksi.pdf_laporan', compact('produkTerjual', 'grandTotal', 'bulan', 'tahun'));
+        $pdf = Pdf::loadView('transaksi.pdf_laporan', compact('produkTerjual', 'grandTotal', 'bulanNama', 'tahun','alamat','telephone','tanggal'));
 
         return $pdf->download('Produk_Terjual_'.$bulan.'_'.$tahun.'.pdf');
     }
@@ -201,7 +206,7 @@ class TransaksiController extends Controller
 
         $isDisabled = !(isset($startDate) && isset($endDate));
 
-        
+
         $transaksiQuery = Penjualan::with(['pelanggan', 'user'])
                                     ->where('user_id',auth()->id());
 
@@ -212,7 +217,7 @@ class TransaksiController extends Controller
         } elseif ($startDate && $endDate) {
             $transaksiQuery->whereBetween('tanggal_penjualan', [$startDate, $endDate]);
         }
-        
+
 
         $transaksi = $transaksiQuery->get();
 
