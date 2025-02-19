@@ -39,5 +39,5 @@ class LoginController extends Controller
         Session::flash('message', 'Anda telah berhasil logout!');
         return redirect()->route('login');
     }
-    
+
 }

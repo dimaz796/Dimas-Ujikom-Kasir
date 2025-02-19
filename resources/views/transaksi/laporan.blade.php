@@ -19,6 +19,9 @@
         .container, .container * {
             visibility: visible;
         }
+        @page {
+        margin: 0;
+    }
     }
 </style>
 
@@ -60,7 +63,7 @@
                                         {{-- <button class="btn btn-success w-full" onclick="window.location.href='{{ route('transaksi.exportToExcel', ['bulan' => $selectedMonth, 'tahun' => $selectedYear]) }}'"><span class="font-semibold">Excel</span></button> --}}
                                     </div>
                                 </div>
-        
+
                             </div>
                         </div>
                     </div>

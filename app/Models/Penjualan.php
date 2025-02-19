@@ -18,6 +18,8 @@ class Penjualan extends Model
         'total_harga',
         'pelanggan_id',
         'user_id',
+        'nominal_pembayaran',
+        'kembalian'
     ];
 
     public function pelanggan()

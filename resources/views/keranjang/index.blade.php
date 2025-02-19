@@ -129,7 +129,12 @@
                             <input type="number" class="form-control" placeholder="No Telephon" name="nomor_telepon" required value="{{ old('nomor_telepon') }}">
                         </div>
 
-                        <!-- Input untuk nominal pembayaran -->
+                        @if (session('error'))
+                            <div class="text-red-600">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+
                         <div class="py-1">
                             <input type="number" class="form-control" placeholder="Nominal Pembayaran" name="nominal_pembayaran" required value="{{ old('nominal_pembayaran') }}">
                         </div>

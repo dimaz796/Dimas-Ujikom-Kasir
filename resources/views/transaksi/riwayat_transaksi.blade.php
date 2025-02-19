@@ -11,23 +11,23 @@
                 <div class="card mx-auto w-100 bg-white shadow-lg rounded-lg p-5">
                     <h1 class="text-3xl font-bold text-center mb-6">Riwayat Transaksi :  {{ auth()->user()->name }}</h1>
                     <hr class="mb-6">
- 
-                        <form method="GET" action="{{ route('transaksi') }}" class="mb-4 d-flex flex-column flex-md-row gap-3">
+
+                        <form method="GET" action="{{ route('riwayat_transaksi') }}" class="mb-4 d-flex flex-column flex-md-row gap-3">
                             <div class="d-flex flex-column flex-md-row align-items-start gap-2">
                                 <input placeholder="" type="date" id="start_date" name="start_date" value="{{ old('start_date', request('end_date')) }}"
                                     class="form-control form-control-sm w-100 w-md-32">
                             </div>
-                            
+
                             <div class="d-flex flex-column flex-md-row align-items-start gap-2">
                                 <label for="end_date" class="text-gray-700 text-sm fw-bold"> - </label>
 
                             </div>
-                    
+
                             <div class="d-flex flex-column flex-md-row align-items-start gap-2">
                                 <input type="date" id="end_date" name="end_date" value="{{ old('end_date', request('end_date')) }}"
                                     class="form-control form-control-sm w-100 w-md-32">
                             </div>
-                    
+
                             <button type="submit" class="btn btn-primary btn-sm">
                                 Filter
                             </button>

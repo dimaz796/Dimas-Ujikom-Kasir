@@ -1,11 +1,11 @@
 <div class="md:px-5">
   <nav class="flex items-center justify-between py-2">
     <div class="flex w-full justify-between px-4 md:px-20">
-  
+
       <a href="#" class="flex items-center text-blue-700 hover:text-neutral-900 no-underline font-semibold">
         Samquik
       </a>
-  
+
       <!-- Hamburger Icon for small screens -->
       <div class="block md:hidden">
         <button id="hamburger" class="text-black/60 hover:text-black/80">
@@ -14,7 +14,7 @@
           </svg>
         </button>
       </div>
-  
+
       <!-- Navigation Links -->
       <ul id="navLinks" class="flex space-x-6 ml-auto mt-3 hidden md:flex">
         <li><a href="{{ route('home') }}" class="text-black/60 hover:text-black/80 font-semibold no-underline">Beranda</a></li>
@@ -34,7 +34,7 @@
       </ul>
     </div>
   </nav>
-  
+
   <!-- Dropdown menu for mobile view -->
   <div id="mobileMenu" class="absolute top-16 left-0 w-full bg-white shadow-lg md:hidden hidden">
     <ul class="space-y-4 p-4">
@@ -57,12 +57,12 @@
 
 </div>
 
-  
+
   <!-- JavaScript for toggling the menu -->
   <script>
     const hamburger = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobileMenu');
-  
+
     hamburger.addEventListener('click', () => {
       mobileMenu.classList.toggle('hidden');
     });

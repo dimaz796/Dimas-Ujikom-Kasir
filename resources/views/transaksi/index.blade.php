@@ -18,32 +18,33 @@
                                     <input placeholder="" type="date" id="start_date" name="start_date" value="{{ old('start_date', request('end_date')) }}"
                                         class="form-control form-control-sm w-100 w-md-32">
                                 </div>
-                                
+
                                 <div class="d-flex flex-column flex-md-row align-items-start gap-2">
                                     <label for="end_date" class="text-gray-700 text-sm fw-bold"> - </label>
 
                                 </div>
-                        
+
                                 <div class="d-flex flex-column flex-md-row align-items-start gap-2">
                                     <input type="date" id="end_date" name="end_date" value="{{ old('end_date', request('end_date')) }}"
                                         class="form-control form-control-sm w-100 w-md-32">
                                 </div>
-                        
+
                                 <button type="submit" class="btn btn-primary btn-sm">
                                     Filter
                                 </button>
+
                             </form>
-                        </div>                        
+                        </div>
                         <div class="col-12 col-md-12 col-lg-3">
                             <div class="d-flex justify-content-md-start justify-content-lg-end">
                                 <a href="{{ ($startDate || $endDate) && !$isDisabled && !$transaksi->isEmpty() ? route('transaksi.printPDF', ['start_date' => $startDate, 'end_date' => $endDate]) : '#' }}"
-                                    class="no-underline bg-red-600 text-white px-4 py-1 rounded-lg text-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-blue-500 
+                                    class="no-underline bg-red-600 text-white px-4 py-1 rounded-lg text-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-blue-500
                                     {{ !($startDate || $endDate) || $isDisabled || $transaksi->isEmpty() ? 'cursor-not-allowed opacity-50 pointer-events-none' : '' }}">
                                     Print PDF
                                 </a>
                             </div>
                         </div>
-                        
+
                     </div>
                     @if(session('error'))
                         <div class="alert alert-danger">
@@ -96,7 +97,7 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
-                                
+
                                 <tfoot class="bg-gray-100">
                                     <tr>
                                         <th colspan="4" class="px-4 py-2 border border-gray-300 text-center">Total Keseluruhan</th>
