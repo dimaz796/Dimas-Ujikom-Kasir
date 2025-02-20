@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id('penjualan_id');
             $table->date('tanggal_penjualan');
             $table->decimal('total_harga', 12, 2);
-            $table->foreignId('pelanggan_id')->nullable()->constrained('pelanggan', 'pelanggan_id')->nullOnDelete();
+            $table->string('pelanggan_id', 10)->nullable();
+            $table->foreign('pelanggan_id')->references('pelanggan_id')->on('pelanggan')->nullOnDelete();
             $table->foreignId('user_id')->constrained('users', 'user_id');
             $table->decimal('nominal_pembayaran', 12, 2);
             $table->decimal('kembalian', 12, 2);

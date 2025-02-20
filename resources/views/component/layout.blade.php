@@ -7,6 +7,8 @@
     @vite('resources/css/app.css')
     <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="path/to/script.js"></script>
+
 </head>
 <body class="bg-gray-100 flex flex-col min-h-screen">
     <!-- Navbar -->

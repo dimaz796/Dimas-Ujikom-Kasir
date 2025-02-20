@@ -110,20 +110,58 @@ class CartController extends Controller
     public function pembayaran(Request $request)
     {
         $userId = auth()->user()->user_id;
-        if ($request->filled('pelanggan_id')) {
-            $pelanggan = Pelanggan::where('pelanggan_id', $request->pelanggan_id)->first();
+
+        $nominalPembayaran = $request->input('nominal_pembayaran');
+        $keranjang = session('keranjang', []);
+
+        $nilai_subtotal = array_column($keranjang, 'subtotal');
+        $total = array_sum($nilai_subtotal);
+
+        $kodePelanggan = null;
+
+
+        if ($nominalPembayaran < $total) {
+            return redirect()->back()->with('error', 'Uang anda kurang.')
+                ->withInput();
+        }
+
+        if ($request->keterangan == 'member') {
+            $request->validate([
+                'pelanggan_id' => 'required|digits:8',
+            ], [
+                'pelanggan_id.required' => 'ID Pelanggan wajib diisi!',
+                'pelanggan_id.digits' => 'ID Pelanggan harus terdiri dari 8 digit angka!',
+            ]);
+
+            $pelangganRequest = 'SQ' . $request->pelanggan_id;
+            $pelanggan = Pelanggan::where('pelanggan_id', $pelangganRequest)->first();
+            $kodePelanggan = $pelanggan->getAttributes()['pelanggan_id'];
             if ($pelanggan) {
                 $namaPelanggan = $pelanggan->nama_pelanggan;
                 $alamatPelanggan = $pelanggan->alamat_pelanggan;
                 $nomorTelepon = $pelanggan->nomor_telepon;
             }
-        } else {
+        } elseif($request->keterangan == 'non_member') {
             $namaPelanggan = $request->nama_pelanggan;
             $alamatPelanggan = $request->alamat_pelanggan;
             $nomorTelepon = $request->nomor_telepon;
 
             if (!empty($namaPelanggan) && !empty($alamatPelanggan) && !empty($nomorTelepon)) {
+                $lastPelanggan = Pelanggan::orderBy('pelanggan_id', 'desc')->first();
+                $LastKodePelanggan = $lastPelanggan->getAttributes()['pelanggan_id'];
+
+                if ($lastPelanggan) {
+                    $lastCode = (int) substr($LastKodePelanggan, 2);
+                } else {
+                    $lastCode = 0;
+                }
+
+                $newCode = $lastCode + 1;
+
+                $kodePelanggan = 'SQ' . str_pad($newCode, 10 - 2, '0', STR_PAD_LEFT);
+
                 $pelanggan = Pelanggan::create([
+                    'pelanggan_id' => $kodePelanggan,
                     'nama_pelanggan' => $namaPelanggan,
                     'alamat_pelanggan' => $alamatPelanggan,
                     'nomor_telepon' => $nomorTelepon
@@ -131,24 +169,10 @@ class CartController extends Controller
             } else {
                 $pelanggan = null;
             }
-
         }
-        $nominalPembayaran = $request->input('nominal_pembayaran');  // Ambil nilai nominal pembayaran
-
-        $keranjang = session('keranjang', []);
-
-        // Hitung total harga dari keranjang
-        $nilai_subtotal = array_column($keranjang, 'subtotal');
-        $total = array_sum($nilai_subtotal);
-
-        if ($nominalPembayaran < $total) {
-            return redirect()->back()->with('error', 'Uang anda kurang.')
-                ->withInput();
-        }
-
-
         if ($keranjang) {
-            $pelangganId = $pelanggan?->pelanggan_id;
+
+            $pelangganId = $kodePelanggan;
 
             $currentDateCek = Carbon::now()->toDateString();
             $jumlahTransaksi = Penjualan::whereDate('tanggal_penjualan', $currentDateCek)->count() + 1;
@@ -177,7 +201,6 @@ class CartController extends Controller
 
                     $produk = Produk::find($item['produk_id']);
                     if ($produk) {
-                        // Kurangi stok produk
                         $produk->stok -= $item['jumlah'];
                         $produk->save();
                     }
@@ -210,7 +233,7 @@ class CartController extends Controller
         return view('keranjang.struk', [
             'penjualan' => $penjualan,
             'pelanggan' => $penjualan->pelanggan,
-            'pelanggan' => $penjualan->user,
+            'user' => $penjualan->user,
             'detailPenjualan' => $penjualan->detailPenjualan,
         ]);
     }

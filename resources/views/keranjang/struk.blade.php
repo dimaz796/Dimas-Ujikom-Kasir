@@ -8,14 +8,13 @@
         <div id="print-area" class="card mx-auto w-75 bg-white shadow-lg rounded-lg p-5">
             <h1 class="text-3xl font-bold text-center mb-6">Struk Penjualan</h1>
             <hr class="mb-6">
-
             <!-- Informasi Pelanggan dan Penjualan -->
             <div class="grid grid-cols-2 gap-6 mb-6">
             @if($penjualan->pelanggan && ($penjualan->pelanggan->nama_pelanggan || $penjualan->pelanggan->alamat_pelanggan || $penjualan->pelanggan->nomor_telepon))
                 <div>
                     <div class="space-y-3">
                         <div class="grid grid-cols-3">
-                            <span class="fw-medium">Nama Pelanggan</span>
+                            <span class="fw-medium">Nama</span>
                             <span class="col-span-2 break-words">: {{ $penjualan->pelanggan->nama_pelanggan }}</span>
                         </div>
 
@@ -25,7 +24,7 @@
                         </div>
 
                         <div class="grid grid-cols-3">
-                            <span class="fw-medium">Nomor Telepon</span>
+                            <span class="fw-medium">Telephone</span>
                             <span class="col-span-2">: {{ $penjualan->pelanggan->nomor_telepon }}</span>
                         </div>
                     </div>
@@ -36,11 +35,11 @@
                 <div>
                     <div class="space-y-3">
                         <div class="grid grid-cols-3">
-                            <span class="fw-medium">ID Penjualan</span>
+                            <span class="fw-medium">Penjualan</span>
                             <span class="col-span-2">: {{ $penjualan->penjualan_id }}</span>
                         </div>
                         <div class="grid grid-cols-3">
-                            <span class="fw-medium">Tanggal Penjualan</span>
+                            <span class="fw-medium">Tanggal</span>
                             <span class="col-span-2">: {{ $penjualan->tanggal_penjualan }}</span>
                         </div>
                         <div class="grid grid-cols-3">

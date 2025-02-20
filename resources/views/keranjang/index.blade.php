@@ -119,35 +119,50 @@
                     <form action="{{ route('keranjang.pembayaran') }}" method="POST">
                         @csrf
                         <div class="fw-semibold">Data Pelanggan</div>
-                    
+                        <input type="hidden" id="keterangan" name="keterangan" value="Member">
+
+
                         <!-- Switch Member/Non-Member -->
                         <div class="form-check form-switch py-1">
-                            <input class="form-check-input" type="checkbox" id="isMemberSwitch">
+                            <input class="form-check-input" checked type="checkbox" id="isMemberSwitch">
                             <label class="form-check-label" for="isMemberSwitch">Member</label>
                         </div>
-                    
+
                         <!-- Form untuk Non-Member -->
-                        <div id="nonMemberFields">
+                        <div id="nonMemberFields" class="hidden">
                             <div class="py-1">
-                                <input type="text" class="form-control" placeholder="Nama Pelanggan" name="nama_pelanggan" >
+                                <input type="text" class="form-control" placeholder="Nama Pelanggan" name="nama_pelanggan" id="nama_pelanggan" oninput="checkFields()">
                             </div>
                             <div class="py-1">
-                                <input type="text" class="form-control" placeholder="Alamat" name="alamat_pelanggan" >
+                                <input type="text" class="form-control" placeholder="Alamat" name="alamat_pelanggan" id="alamat_pelanggan" oninput="checkFields()">
                             </div>
                             <div class="py-1">
-                                <input type="number" class="form-control" placeholder="No Telepon" name="nomor_telepon" >
+                                <input type="number" class="form-control" placeholder="No Telepon" name="nomor_telepon" id="nomor_telepon" oninput="checkFields()">
                             </div>
                         </div>
 
-                    
+
                         <!-- Form untuk Member -->
-                        <div id="memberFields" class="hidden">
-                            <div class="py-1">
-                                <input type="text" class="form-control"  id="pelanggan_id" placeholder="ID Pelanggan" name="pelanggan_id" value="{{ old('pelanggan_id') }}">
+                        <div id="memberFields">
+                            <div class="row g-2 align-items-center">
+                                <div class="col-9">
+                                    <div class="input-group">
+                                        <span class="input-group-text">SQ</span>
+                                        <input type="text" class="form-control" id="pelanggan_id" name="pelanggan_id"
+                                            placeholder="Masukkan Nomor" value="{{ old('pelanggan_id') }}" maxlength="8">
+                                    </div>
+                                </div>
+
+                                <div class="col-3"> <!-- 25% dari 12 kolom -->
+                                    <button type="button" class="btn btn-secondary w-100" id="verifyMember">Cari</button>
+                                </div>
+                                @error('pelanggan_id')
+                                    <div class="col-12">
+                                        <div class="text-danger mt-1">{{ $message }}</div>
+                                    </div>
+                                @enderror
                             </div>
-                            <div class="py-1">
-                                <button type="button" class="btn btn-secondary" id="verifyMember">Cari Pelanggan</button>
-                            </div>
+
 
                             <div id="memberData" class="hidden">
                                 <div class="py-1">
@@ -161,9 +176,10 @@
                                 </div>
                             </div>
                         </div>
-                        
-                    
+
+
                         <div class="py-1">
+                            <span class="font-semibold">Masukan Nominal</span>
                             <input type="number" class="form-control" placeholder="Nominal Pembayaran" name="nominal_pembayaran" required value="{{ old('nominal_pembayaran') }}">
                         </div>
                         @if (session('error'))
@@ -171,7 +187,7 @@
                                 {{ session('error') }}
                             </div>
                         @endif
-                    
+
                         <div class="flex items-center justify-between p-1">
                             <div class="flex-initial">
                                 <button class="btn btn-primary" {{ $keranjang ? '' : 'disabled' }}>Bayar Sekarang</button>
@@ -194,25 +210,54 @@
     <script>
         $(document).ready(function() {
 
-            document.querySelector("form").addEventListener("submit", function(event) {
-            let nama = document.querySelector("input[name='nama_pelanggan']").value;
-            let alamat = document.querySelector("input[name='alamat_pelanggan']").value;
-            let telepon = document.querySelector("input[name='nomor_telepon']").value;
+            function checkFields() {
+                let nama = document.getElementById("nama_pelanggan").value.trim();
+                let alamat = document.getElementById("alamat_pelanggan").value.trim();
+                let telepon = document.getElementById("nomor_telepon").value.trim();
 
-            console.log("Nama:", nama);
-            console.log("Alamat:", alamat);
-            console.log("No Telepon:", telepon);
-        });
+                let isAnyFilled = nama !== "" || alamat !== "" || telepon !== "";
+
+                document.getElementById("nama_pelanggan").required = isAnyFilled;
+                document.getElementById("alamat_pelanggan").required = isAnyFilled;
+                document.getElementById("nomor_telepon").required = isAnyFilled;
+            }
+
+            document.getElementById("nama_pelanggan").oninput = checkFields;
+            document.getElementById("alamat_pelanggan").oninput = checkFields;
+            document.getElementById("nomor_telepon").oninput = checkFields;
+
+
+            function ensureSQPrefix(input) {
+                if (!input.value.startsWith("SQ")) {
+                    input.value = "SQ";
+                }
+            }
+
             const isMemberSwitch = document.getElementById("isMemberSwitch");
             const memberFields = document.getElementById("memberFields");
             const nonMemberFields = document.getElementById("nonMemberFields");
             const verifyMemberBtn = document.getElementById("verifyMember");
             const memberData = document.getElementById("memberData");
+            const keteranganInput = document.getElementById("keterangan");
+
+            function toggleFields() {
+                if (isMemberSwitch.checked) {
+                    memberFields.style.display = "block";
+                    nonMemberFields.style.display = "none";
+                    keteranganInput.value = "member";
+                } else {
+                    memberFields.style.display = "none";
+                    nonMemberFields.style.display = "block";
+                    keteranganInput.value = "non_member";
+                }
+            }
 
             isMemberSwitch.addEventListener("change", function () {
+                toggleFields();
                 if (this.checked) {
                     memberFields.classList.remove("hidden");
                     nonMemberFields.classList.add("hidden");
+
                 } else {
                     memberFields.classList.add("hidden");
                     nonMemberFields.classList.remove("hidden");
@@ -220,13 +265,14 @@
             });
 
             verifyMemberBtn.addEventListener("click", function () {
-                const pelangganId = document.getElementById("pelanggan_id").value;
+                pelangganKode = document.getElementById("pelanggan_id").value;
+
+                const pelangganId = 'SQ' + pelangganKode;
 
                 if (!pelangganId) {
-                    alert("Masukkan ID Pelanggan terlebih dahulu!");
+                    alert("Masukkan ID Pelanggan terlebih dahulu! " + pelangganId);
                     return;
                 }
-                console.log(pelangganId);
 
                 fetch(`/cari-pelanggan/${pelangganId}`)
                     .then(response => response.json())
@@ -239,7 +285,7 @@
 
                             memberData.classList.remove("hidden"); // Tampilkan data pelanggan
                         } else {
-                            alert("Pelanggan tidak ditemukan!");
+                            alert("Pelanggan tidak ditemukan!" + pelangganId);
                         }
                     })
                     .catch(error => console.error("Terjadi kesalahan:", error));
