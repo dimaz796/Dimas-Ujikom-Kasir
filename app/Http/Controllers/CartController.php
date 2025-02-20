@@ -111,8 +111,9 @@ class CartController extends Controller
     {
         $userId = auth()->user()->user_id;
 
-        $nominalPembayaran = $request->input('nominal_pembayaran');
+        $nominalPembayaran = str_replace('.', '', $request->input('nominal_pembayaran'));
         $keranjang = session('keranjang', []);
+
 
         $nilai_subtotal = array_column($keranjang, 'subtotal');
         $total = array_sum($nilai_subtotal);

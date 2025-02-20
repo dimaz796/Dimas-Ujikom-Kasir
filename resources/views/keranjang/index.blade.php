@@ -180,7 +180,11 @@
 
                         <div class="py-1">
                             <span class="font-semibold">Masukan Nominal</span>
-                            <input type="number" class="form-control" placeholder="Nominal Pembayaran" name="nominal_pembayaran" required value="{{ old('nominal_pembayaran') }}">
+                            <div class="input-group">
+                                <span class="input-group-text">Rp</span>
+                                <input type="text" class="form-control" placeholder="Nominal Pembayaran" name="nominal_pembayaran" required value="{{ old('nominal_pembayaran') }}">
+                            </div>
+                            
                         </div>
                         @if (session('error'))
                             <div class="text-red-600">
@@ -239,6 +243,15 @@
             const verifyMemberBtn = document.getElementById("verifyMember");
             const memberData = document.getElementById("memberData");
             const keteranganInput = document.getElementById("keterangan");
+            const nominalInput = document.querySelector("input[name='nominal_pembayaran']");
+
+            nominalInput.addEventListener("input", function (e) {
+                let value = e.target.value.replace(/\D/g, "");
+
+                let formattedValue = new Intl.NumberFormat("id-ID").format(value);
+
+                e.target.value = formattedValue;
+            });
 
             function toggleFields() {
                 if (isMemberSwitch.checked) {
