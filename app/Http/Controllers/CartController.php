@@ -105,7 +105,7 @@ class CartController extends Controller
         ]);
     }
 
-    
+
 
     public function pembayaran(Request $request)
     {
@@ -115,7 +115,7 @@ class CartController extends Controller
             if ($pelanggan) {
                 $namaPelanggan = $pelanggan->nama_pelanggan;
                 $alamatPelanggan = $pelanggan->alamat_pelanggan;
-                $nomor_telepon = $pelanggan->nomor_telepon;
+                $nomorTelepon = $pelanggan->nomor_telepon;
             }
         } else {
             $namaPelanggan = $request->nama_pelanggan;
@@ -146,10 +146,9 @@ class CartController extends Controller
                 ->withInput();
         }
 
-        
+
         if ($keranjang) {
             $pelangganId = $pelanggan?->pelanggan_id;
-
 
             $currentDateCek = Carbon::now()->toDateString();
             $jumlahTransaksi = Penjualan::whereDate('tanggal_penjualan', $currentDateCek)->count() + 1;

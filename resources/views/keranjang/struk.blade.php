@@ -11,22 +11,27 @@
 
             <!-- Informasi Pelanggan dan Penjualan -->
             <div class="grid grid-cols-2 gap-6 mb-6">
+            @if($penjualan->pelanggan && ($penjualan->pelanggan->nama_pelanggan || $penjualan->pelanggan->alamat_pelanggan || $penjualan->pelanggan->nomor_telepon))
                 <div>
                     <div class="space-y-3">
                         <div class="grid grid-cols-3">
                             <span class="fw-medium">Nama Pelanggan</span>
-                            <span class="col-span-2 break-words">: {{ $pelanggan->nama_pelanggan ?? '-' }}</span>
+                            <span class="col-span-2 break-words">: {{ $penjualan->pelanggan->nama_pelanggan }}</span>
                         </div>
+
                         <div class="grid grid-cols-3">
                             <span class="fw-medium">Alamat</span>
-                            <span class="col-span-2 break-words">: {{ $pelanggan->alamat_pelanggan ?? '-' }}</span>
+                            <span class="col-span-2 break-words">: {{ $penjualan->pelanggan->alamat_pelanggan }}</span>
                         </div>
+
                         <div class="grid grid-cols-3">
                             <span class="fw-medium">Nomor Telepon</span>
-                            <span class="col-span-2">: {{ $pelanggan->nomor_telepon?? '-' }}</span>
+                            <span class="col-span-2">: {{ $penjualan->pelanggan->nomor_telepon }}</span>
                         </div>
                     </div>
                 </div>
+                @endif
+
 
                 <div>
                     <div class="space-y-3">
