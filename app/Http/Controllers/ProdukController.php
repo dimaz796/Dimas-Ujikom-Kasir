@@ -40,7 +40,7 @@ class ProdukController extends Controller
     public function index()
     {
         $produk = Produk::where('status','active')->oldest()->paginate(10);
-        
+
 
         $cekStok = Produk::where('status','active')
                             ->where('stok', '<', 25)->get()->count();
@@ -118,6 +118,13 @@ class ProdukController extends Controller
         $produk->update($validatedData);
 
         return redirect('/produk')->with('success','Produk Berhasil Diperbaharui!');
+    }
+
+    public function stock($id)
+    {
+        $produk = Produk::findOrFail($id);
+
+        return view('produk.halaman_stok', compact('produk'));
     }
 
     public function delete($id)

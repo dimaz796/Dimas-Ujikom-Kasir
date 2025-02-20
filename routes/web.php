@@ -34,14 +34,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/produk', [ProdukController::class, 'index'])->name('produk');
     Route::get('/produk/tambah', [ProdukController::class, 'create'])->name('produk.create');
     Route::post('/produk', [ProdukController::class, 'store'])->name('produk.store');
+    Route::get('/produk/stok/{id}', [ProdukController::class, 'stock'])->name('produk.stock');
     Route::get('/produk/{id}/edit', [ProdukController::class, 'edit'])->name('produk.edit');
     Route::post('/produk/{id}', [ProdukController::class, 'update'])->name('produk.update');
     Route::delete('/produk/{id}', [ProdukController::class, 'delete'])->name('produk.delete');
     Route::get('/produk/{id}', [ProdukController::class, 'show'])->name('produk.show');
-    
+
 
     //Riwayat Transaksi
     Route::get('/riwayat-transaksi', [TransaksiController::class, 'riwayatTransaksi'])->name('riwayat_transaksi');
+    Route::get('/laporan/print', [TransaksiController::class, 'print'])->name('laporan.print');
+
 
 
 });

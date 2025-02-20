@@ -119,5 +119,11 @@
         <hr class="border-t-2 border-gray-300">
     </div>
 
+    <script>
+        window.onload = function() {
+            window.print();
+        };
+    </script>
+
 </body>
 </html>

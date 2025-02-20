@@ -95,6 +95,7 @@
     <table class="table">
         <thead>
             <tr>
+                <th>No</th>
                 <th>No Transaksi</th>
                 <th>Nama Pelanggan</th>
                 <th>Tanggal</th>
@@ -106,31 +107,34 @@
             </tr>
         </thead>
         <tbody>
+            @php $no = 1; @endphp
             @foreach ($transaksi as $item)
                 @php
-                    $detailCount = $item->detailPenjualan->count(); // Count the number of detailPenjualan
+                    $detailCount = $item->detailPenjualan->count();
                 @endphp
                 @foreach ($item->detailPenjualan as $key => $detail)
                     <tr>
-                        @if ($key == 0) <!-- Apply rowspan only for the first row -->
+                        @if ($key == 0)
+                            <td rowspan="{{ $detailCount }}">{{ $no++ }}</td>
                             <td rowspan="{{ $detailCount }}">{{ $item->penjualan_id }}</td>
-                            <td rowspan="{{ $detailCount }}">{{ $item->pelanggan->nama_pelanggan?? '-' }}</td>
+                            <td rowspan="{{ $detailCount }}">{{ $item->pelanggan->nama_pelanggan ?? '-' }}</td>
                             <td rowspan="{{ $detailCount }}">{{ Carbon\Carbon::parse($item->tanggal_penjualan)->translatedFormat('j, F Y') }}</td>
                             <td rowspan="{{ $detailCount }}">{{ $item->user->name }}</td>
-                         @endif
-                         <td>{{ $detail->produk->nama_produk }}</td>
-                         <td class="text-right">{{ $detail->jumlah_produk }}</td>
-                         <td class="text-right">Rp{{ number_format($detail->subtotal, 0, ',', '.') }}</td>
-                         @if ($key == 0) <!-- Apply rowspan only for the first row -->
+                        @endif
+                        <td>{{ $detail->produk->nama_produk }}</td>
+                        <td class="text-right">{{ $detail->jumlah_produk }}</td>
+                        <td class="text-right">Rp{{ number_format($detail->subtotal, 0, ',', '.') }}</td>
+                        @if ($key == 0)
                             <td rowspan="{{ $detailCount }}" class="text-right">Rp{{ number_format($item->total_harga, 0, ',', '.') }}</td>
-                         @endif
+                        @endif
                     </tr>
                 @endforeach
             @endforeach
         </tbody>
+
         <tfoot class="grand-total">
             <tr>
-                <th colspan="7">Grand Total</th>
+                <th colspan="8">Grand Total</th>
                 <th class="text-right">Rp{{ number_format($transaksi->sum('total_harga'), 0, ',', '.') }}</th>
             </tr>
         </tfoot>

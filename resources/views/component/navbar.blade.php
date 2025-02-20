@@ -6,7 +6,6 @@
         Samquik
       </a>
 
-      <!-- Hamburger Icon for small screens -->
       <div class="block md:hidden">
         <button id="hamburger" class="text-black/60 hover:text-black/80">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -15,7 +14,6 @@
         </button>
       </div>
 
-      <!-- Navigation Links -->
       <ul id="navLinks" class="flex space-x-6 ml-auto mt-3 hidden md:flex">
         @auth
 
@@ -33,12 +31,11 @@
         <li><a href="{{ route('produk') }}" class="text-black/60 hover:text-black/80 font-semibold no-underline">Data Produk</a></li>
         @endauth
 
-        <li><a href="{{ route('logout') }}" class="text-black/60 hover:text-black/80 font-semibold no-underline">Logout</a></li>
+        <li><a href="{{ route('logout') }}" onclick="return confirm('Apakah Anda yakin ingin logout?')" class="text-black/60 hover:text-black/80 font-semibold no-underline">Logout</a></li>
       </ul>
     </div>
   </nav>
 
-  <!-- Dropdown menu for mobile view -->
   <div id="mobileMenu" class="absolute top-16 left-0 w-full bg-white shadow-lg md:hidden hidden">
     <ul class="space-y-4 p-4">
       <li><a href="{{ route('home') }}" class="block text-black/60 hover:text-black/80 font-semibold">Beranda</a></li>
@@ -54,14 +51,13 @@
           <li><a href="{{ route('transaksi') }}" class="block text-black/60 hover:text-black/80 font-semibold">Data Transaksi</a></li>
         @endif
       @endauth
-      <li><a href="{{ route('logout') }}" class="block text-black/60 hover:text-black/80 font-semibold">Logout</a></li>
+      <li><a href="{{ route('logout') }}" onclick="return confirm('Apakah Anda yakin ingin logout?')" class="block text-black/60 hover:text-black/80 font-semibold">Logout</a></li>
     </ul>
   </div>
 
 </div>
 
 
-  <!-- JavaScript for toggling the menu -->
   <script>
     const hamburger = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobileMenu');

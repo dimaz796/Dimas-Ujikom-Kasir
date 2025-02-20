@@ -33,7 +33,7 @@ class LoginController extends Controller
                 return redirect()->route('home');
             }
 
-            return redirect()->route('dashboard'); // Default redirect jika role tidak dikenali
+            return redirect()->route('dashboard');
         } else {
             Session::flash('error', 'Username atau Password Salah!');
             return redirect()->route('login');

@@ -5,22 +5,18 @@
         alert("{{ session('message') }}");
     </script>
 @endif
-<!-- component -->
-<!-- Container -->
+
 <div class="flex flex-wrap min-h-screen w-full content-center justify-center bg-blue-50 py-10">
 
-  <!-- Login component -->
   <div class="flex shadow-md">
 
-     <!-- Login banner -->
     <div class="flex flex-wrap content-center bg-cover justify-center rounded-r-md overflow-hidden" style="width: 45rem; height: 32rem;">
-      <img class="w-full h-full object-cover rounded-r-md transition-transform duration-300 ease-in-out hover:scale-110" 
+      <img class="w-full h-full object-cover rounded-r-md transition-transform duration-300 ease-in-out hover:scale-110"
            src="{{ asset('storage/component/login.jpg') }}">
     </div>
-    <!-- Login form -->
+
     <div class="flex flex-wrap content-center justify-center rounded-l-md bg-white" style="width: 24rem; height: 32rem;">
       <div class="w-72">
-        <!-- Heading -->
         <h1 class="text-xl font-semibold">Samquik</h1>
         <small class="text-gray-400">Silahkan Login</small>
 
@@ -29,7 +25,6 @@
             <p>{{ session('error') }}</p>
         </div>
         @endif
-        <!-- Form -->
         <form class="mt-4" method="POST" action="{{ route('cekLogin') }}">
             @csrf
           <div class="mb-3">
@@ -48,9 +43,6 @@
         </form>
       </div>
     </div>
-
-   
-    
 
   </div>
 </div>

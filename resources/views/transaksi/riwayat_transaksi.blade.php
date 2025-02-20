@@ -28,9 +28,18 @@
                                     class="form-control form-control-sm w-100 w-md-32">
                             </div>
 
+                            <div class="d-flex flex-column flex-md-row align-items-end gap-2">
+                                <input type="text" id="search" name="search"
+                                    placeholder="Cari transaksi..."
+                                    value="{{ old('search', request('search')) }}"
+                                    class="form-control form-control-sm w-100 w-md-32">
+                            </div>
+
                             <button type="submit" class="btn btn-primary btn-sm">
                                 Filter
                             </button>
+
+
                         </form>
 
                     @if(session('error'))

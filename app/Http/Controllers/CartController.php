@@ -170,12 +170,13 @@ class CartController extends Controller
                 $pelanggan = null;
             }
         }
+
         if ($keranjang) {
 
             $pelangganId = $kodePelanggan;
 
             $currentDateCek = Carbon::now()->toDateString();
-            $jumlahTransaksi = Penjualan::whereDate('tanggal_penjualan', $currentDateCek)->count() + 1;
+            $jumlahTransaksi = Penjualan::whereDate('created_at', $currentDateCek)->count() + 1;
             $penjualanId = Carbon::now()->format('dmY') . str_pad($jumlahTransaksi, 3, '0', STR_PAD_LEFT);
 
             $penjualan = Penjualan::create([
@@ -212,7 +213,6 @@ class CartController extends Controller
                 }
             }
         } else {
-            // Jika tidak ada pelanggan
             Session::forget('keranjang');
             return redirect()->route('home')->with('error', 'Transaksi gagal, keranjang kosong.');
         }

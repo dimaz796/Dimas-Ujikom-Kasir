@@ -7,7 +7,6 @@
         <div class="row">
             <div class="col-9">
 
-                <!-- Card Utama -->
                 <div class="card mx-auto w-100 bg-white shadow-lg rounded-lg p-5">
                     <h1 class="text-3xl font-bold text-center mb-6">Data Penjualan</h1>
                     <hr class="mb-6">
@@ -29,6 +28,12 @@
                                         class="form-control form-control-sm w-100 w-md-32">
                                 </div>
 
+                                <div class="d-flex flex-column flex-md-row align-items-end gap-2">
+                                    <input type="text" id="search" name="search"
+                                        placeholder="Cari transaksi..."
+                                        value="{{ old('search', request('search')) }}"
+                                        class="form-control form-control-sm w-100 w-md-32">
+                                </div>
                                 <button type="submit" class="btn btn-primary btn-sm">
                                     Filter
                                 </button>
@@ -37,9 +42,15 @@
                         </div>
                         <div class="col-12 col-md-12 col-lg-3">
                             <div class="d-flex justify-content-md-start justify-content-lg-end">
-                                <a href="{{ ($startDate || $endDate) && !$isDisabled && !$transaksi->isEmpty() ? route('transaksi.printPDF', ['start_date' => $startDate, 'end_date' => $endDate]) : '#' }}"
+                                <a href="{{ ($startDate || $endDate || $search) && !$isDisabled && !$transaksi->isEmpty()
+                                            ? route('transaksi.printPDF', [
+                                                'start_date' => $startDate,
+                                                'end_date' => $endDate,
+                                                'search' => $search
+                                              ])
+                                            : '#' }}"
                                     class="no-underline bg-red-600 text-white px-4 py-1 rounded-lg text-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-blue-500
-                                    {{ !($startDate || $endDate) || $isDisabled || $transaksi->isEmpty() ? 'cursor-not-allowed opacity-50 pointer-events-none' : '' }}">
+                                           {{ !($startDate || $endDate || $search) || $isDisabled || $transaksi->isEmpty() ? 'cursor-not-allowed opacity-50 pointer-events-none' : '' }}">
                                     Print PDF
                                 </a>
                             </div>
@@ -52,11 +63,12 @@
                         </div>
                     @endif
 
-                    <!-- Detail Penjualan -->
                     <div class="mt-3 overflow-x-auto">
                         <table class="w-full table-auto border-collapse border border-gray-300 ">
                             <thead class="bg-gray-100">
                                 <tr>
+
+                                    <th class="px-4 py-2 border border-gray-300 text-center">No</th>
                                     <th class="px-4 py-2 border border-gray-300 text-center">No Transaksi</th>
                                     <th class="px-4 py-2 border border-gray-300 text-center">Nama Pelanggan</th>
                                     <th class="px-4 py-2 border border-gray-300 text-center">Tanggal</th>
@@ -66,7 +78,7 @@
                                 </tr>
                             </thead>
 
-                            @if($transaksi->isEmpty())  <!-- Cek jika data transaksi kosong -->
+                            @if($transaksi->isEmpty())
                                 <tbody>
                                     <tr>
                                         <td colspan="6" class="px-4 py-2 text-center text-gray-500">Tidak ada data transaksi</td>
@@ -76,6 +88,7 @@
                                 <tbody>
                                     @foreach ($transaksi as $item)
                                         <tr class="hover:bg-gray-50">
+                                            <td class="px-4 py-2 border border-gray-300 text-center">{{ $loop->iteration }}</td>
                                             <td class="px-4 py-2 border border-gray-300 text-center">{{ $item->penjualan_id }}</td>
                                             <td class="px-4 py-2 border border-gray-300">{{ $item->pelanggan->nama_pelanggan?? '-' }}</td>
                                             <td class="px-4 py-2 border border-gray-300 text-center">
@@ -86,7 +99,7 @@
                                                 Rp{{ number_format($item->total_harga, 0, ',', '.') }}
                                             </td>
                                             <td class="px-4 py-2 border border-gray-300 text-center">
-                                                @if(optional($item->produk)->isEmpty()) <!-- Check if produk is empty -->
+                                                @if(optional($item->produk)->isEmpty())
                                                     Tidak ada transaksi
                                                 @else
                                                     <div class="p-2 d-flex justify-content-center">
@@ -106,6 +119,9 @@
                                 </tfoot>
                             @endif
                         </table>
+                        {{-- <div class="mt-4">
+                            {{ $transaksi->links() }}
+                        </div> --}}
                     </div>
                 </div>
             </div>

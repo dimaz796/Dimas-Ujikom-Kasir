@@ -17,9 +17,7 @@
         </div>
     @endif
     <div class="row mb-3">
-        <!-- Kolom Kiri: Pencarian dan Restock -->
         <div class="col-9 d-flex align-items-center">
-            <!-- Form Pencarian Produk -->
             <form action="{{ route('produk.search') }}" method="GET" class="d-flex me-2 w-50">
                 <label for="simple-search" class="sr-only">Search</label>
                 <div class="relative w-full">
@@ -37,10 +35,8 @@
                 </button>
             </form>
 
-            {{-- @if($cekStok > 1)
-                <!-- Tombol Restock -->
+            @if($cekStok > 1)
                 <a href="{{ route('produk.restock') }}" class="btn btn-danger d-flex align-items-center position-relative ms-2">
-                    <!-- SVG Icon for Cart -->
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m6 4.125 2.25 2.25m0 0 2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
                     </svg>
@@ -51,11 +47,10 @@
                         {{ $cekStok }}
                     </span>
                 </a>
-            @endif --}}
-
+            @endif
         </div>
 
-        <!-- Kolom Kanan: Tambah Produk -->
+
         <div class="col-3 d-flex justify-content-end align-items-center">
             <a href="{{ route('produk.create') }}" class="btn btn-primary btn-md">Tambah Produk</a>
         </div>
@@ -88,6 +83,11 @@
                         </div>
                     </td>
                     <td>
+                        <a href="{{ route('produk.stock',['id' => $item->produk_id ]) }}" class="btn btn-success btn-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                              </svg>
+                        </a>
                         <a href="{{ route('produk.edit', ['id' => $item->produk_id]) }}" class="btn btn-warning btn-sm">Edit</a>
                         <form action="{{ route('produk.delete', ['id' => $item->produk_id]) }}" id="delete-form-{{ $item->produk_id }}"  method="POST" style="display:inline;">
                             @csrf

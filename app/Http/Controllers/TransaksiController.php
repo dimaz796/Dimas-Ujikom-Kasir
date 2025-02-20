@@ -20,12 +20,10 @@ class TransaksiController extends Controller
         $endDate = $request->input('end_date', null);
 
         if ($startDate && $endDate && $startDate > $endDate) {
-            // Menampilkan alert error
             return back()->with('error', 'Tanggal Tidak Valid')->withInput();
         }
 
         $isDisabled = !($startDate || $endDate);
-
 
         $transaksiQuery = Penjualan::with(['pelanggan', 'user']);
 
@@ -37,6 +35,19 @@ class TransaksiController extends Controller
             $transaksiQuery->whereBetween('tanggal_penjualan', [$startDate, $endDate]);
         }
 
+        if ($search = request('search')) {
+            $transaksiQuery->where(function ($query) use ($search) {
+                $query->where('penjualan_id', 'like', "%{$search}%")
+                    ->orWhere('total_harga', 'like', "%{$search}%")
+                    ->orWhereHas('pelanggan', function ($query) use ($search) {
+                        $query->where('nama_pelanggan', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $grandTotal = $transaksiQuery->sum('total_harga');
+
+        // $transaksi = $transaksiQuery->paginate(10);
         $transaksi = $transaksiQuery->get();
 
         $firstTransactionYear = Penjualan::min(DB::raw('YEAR(tanggal_penjualan)'));
@@ -50,7 +61,6 @@ class TransaksiController extends Controller
 
         $currentMonth = now()->month;
 
-        $grandTotal = $transaksi->sum('total_harga');
         return view('transaksi.index', compact(
             'transaksi',
             'grandTotal',
@@ -60,10 +70,9 @@ class TransaksiController extends Controller
             'distinctMonths',
             'startDate',
             'endDate',
-            'isDisabled'
+            'isDisabled',
+            'search'
         ));
-
-
     }
 
 
@@ -78,7 +87,6 @@ class TransaksiController extends Controller
         $startDate = Carbon::createFromFormat('Y-m', "{$tahun}-{$bulan}")->startOfMonth();
         $endDate = Carbon::createFromFormat('Y-m', "{$tahun}-{$bulan}")->endOfMonth();
 
-        // Ambil data transaksi berdasarkan tanggal
         $dataTransaksi = Penjualan::whereBetween('tanggal_penjualan', [$startDate, $endDate])
             ->selectRaw('DATE(tanggal_penjualan) as date, sum(total_harga) as total_transaksi')
             ->groupBy('date')
@@ -86,7 +94,6 @@ class TransaksiController extends Controller
             ->get();
 
 
-        // Ambil produk terlaris
         $dataProdukTerjual = DetailPenjualan::with('produk')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->groupBy('produk_id')
@@ -94,7 +101,6 @@ class TransaksiController extends Controller
             ->orderByDesc('total_jual')
             ->get();
 
-        // Format data untuk frontend
         $labels = $dataTransaksi->pluck('date')->toArray();
         $totalTransaksi = $dataTransaksi->pluck('total_transaksi')->toArray();
 
@@ -124,7 +130,6 @@ class TransaksiController extends Controller
         $startDate = Carbon::createFromFormat('Y-m', "{$tahun}-{$bulan}")->startOfMonth();
         $endDate = Carbon::createFromFormat('Y-m', "{$tahun}-{$bulan}")->endOfMonth();
 
-        // Mengembalikan file Excel
         return Excel::download(new ProdukTerjualExport($startDate, $endDate), 'Produk_Terjual_'.$bulan.'_'.$tahun.'.xlsx');
     }
 
@@ -144,23 +149,49 @@ class TransaksiController extends Controller
             ->orderByDesc('total_jual')
             ->get();
 
-        // Menghitung Grand Total
         $grandTotal = $produkTerjual->sum('total_harga');
 
         $alamat = "Jalan TokTok No 12";
         $telephone = "(022) 12312341 ";
         $tanggal = Carbon::now()->translatedFormat('j F Y');
 
-        // Membuat PDF
         $pdf = Pdf::loadView('transaksi.pdf_laporan', compact('produkTerjual', 'grandTotal', 'bulanNama', 'tahun','alamat','telephone','tanggal'));
 
         return $pdf->download('Produk_Terjual_'.$bulan.'_'.$tahun.'.pdf');
     }
 
+    public function print(Request $request)
+    {
+        $bulan = $request->input('bulan');
+        $tahun = $request->input('tahun');
+        $bulanNama = Carbon::createFromFormat('m', $bulan)->translatedFormat('F');
+
+        $startDate = Carbon::createFromFormat('Y-m', "{$tahun}-{$bulan}")->startOfMonth();
+        $endDate = Carbon::createFromFormat('Y-m', "{$tahun}-{$bulan}")->endOfMonth();
+
+        $produkTerjual = DetailPenjualan::join('produk', 'detail_penjualans.produk_id', '=', 'produk.produk_id')
+            ->whereBetween('detail_penjualans.created_at', [$startDate, $endDate])
+            ->groupBy('detail_penjualans.produk_id', 'produk.nama_produk')
+            ->selectRaw('detail_penjualans.produk_id, sum(jumlah_produk) as total_jual, sum(subtotal) as total_harga, produk.nama_produk as produk_nama')
+            ->orderByDesc('total_jual')
+            ->get();
+
+        $grandTotal = $produkTerjual->sum('total_harga');
+
+        $alamat = "Jalan TokTok No 12";
+        $telephone = "(022) 12312341 ";
+        $tanggal = Carbon::now()->translatedFormat('j F Y');
+
+        return view('transaksi.pdf_laporan', compact('produkTerjual', 'grandTotal', 'bulanNama', 'tahun', 'alamat', 'telephone', 'tanggal'));
+    }
+
+
     public function printPDF(Request $request)
     {
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
+        $search = $request->input('search');
+
         $transaksiQuery = Penjualan::with(['pelanggan', 'user', 'detailPenjualan.produk']);
 
         if ($startDate) {
@@ -169,6 +200,18 @@ class TransaksiController extends Controller
 
         if ($endDate) {
             $transaksiQuery->whereDate('tanggal_penjualan', '<=', $endDate);
+        }
+
+        if ($search) {
+            $transaksiQuery->where(function ($query) use ($search) {
+                $query->where('penjualan_id', 'like', "%{$search}%")
+                      ->orWhereHas('pelanggan', function ($query) use ($search) {
+                          $query->where('nama_pelanggan', 'like', "%{$search}%");
+                      })
+                      ->orWhereHas('detailPenjualan.produk', function ($query) use ($search) {
+                          $query->where('nama_produk', 'like', "%{$search}%");
+                      });
+            });
         }
 
         $tanggal = Carbon::now()->translatedFormat('j F Y');
@@ -193,14 +236,13 @@ class TransaksiController extends Controller
         return $pdf->download($fileName);
     }
 
-    // Hanya Untuk Petugas
     public function riwayatTransaksi(Request $request)
     {
         $startDate = $request->input('start_date', null);
         $endDate = $request->input('end_date', null);
+        $search = $request->input('search',null);
 
         if ($startDate && $endDate && $startDate > $endDate) {
-            // Menampilkan alert error
             return back()->with('error', 'Tanggal Tidak Valid')->withInput();
         }
 
@@ -208,7 +250,7 @@ class TransaksiController extends Controller
 
 
         $transaksiQuery = Penjualan::with(['pelanggan', 'user'])
-                                    ->where('user_id',auth()->id());
+        ->where('user_id', auth()->id());
 
         if ($startDate && !$endDate) {
             $transaksiQuery->whereDate('tanggal_penjualan', $startDate);
@@ -218,15 +260,22 @@ class TransaksiController extends Controller
             $transaksiQuery->whereBetween('tanggal_penjualan', [$startDate, $endDate]);
         }
 
+        if ($search = request('search')) {
+            $transaksiQuery->where(function ($query) use ($search) {
+                $query->where('penjualan_id', 'like', "%{$search}%")
+                    ->orWhere('total_harga', 'like', "%{$search}%")
+                    ->orWhereHas('pelanggan', function ($query) use ($search) {
+                        $query->where('nama_pelanggan', 'like', "%{$search}%");
+                    });
+            });
+        }
 
         $transaksi = $transaksiQuery->get();
+
 
         $grandTotal = $transaksi->sum('total_harga');
 
 
         return view('transaksi.riwayat_transaksi', compact('transaksi', 'startDate', 'endDate','isDisabled','grandTotal'));
     }
-
-
-
 }
