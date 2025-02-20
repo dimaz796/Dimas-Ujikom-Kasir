@@ -126,6 +126,17 @@ class ProdukController extends Controller
 
         return view('produk.halaman_stok', compact('produk'));
     }
+ 
+    public function updateStock(Request $request)
+    {
+        $stokTambahan = $request->input('stok_tambahan');
+        $produk = Produk::findOrFail($request->produk_id);
+        
+        $produk->stok += $stokTambahan;
+        $produk->save();
+
+        return redirect('/produk')->with('success','Stok Pada Produk ' . $produk->nama_produk . ' Berhasil Ditambahkan!');
+    }
 
     public function delete($id)
     {

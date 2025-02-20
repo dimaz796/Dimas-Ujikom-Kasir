@@ -127,10 +127,10 @@ class CartController extends Controller
 
         if ($request->keterangan == 'member') {
             $request->validate([
-                'pelanggan_id' => 'required|digits:8',
+                'pelanggan_id' => 'required|digits:3',
             ], [
                 'pelanggan_id.required' => 'ID Pelanggan wajib diisi!',
-                'pelanggan_id.digits' => 'ID Pelanggan harus terdiri dari 8 digit angka!',
+                'pelanggan_id.digits' => 'ID Pelanggan harus terdiri dari 3 digit angka!',
             ]);
 
             $pelangganRequest = 'SQ' . $request->pelanggan_id;
@@ -148,9 +148,9 @@ class CartController extends Controller
 
             if (!empty($namaPelanggan) && !empty($alamatPelanggan) && !empty($nomorTelepon)) {
                 $lastPelanggan = Pelanggan::orderBy('pelanggan_id', 'desc')->first();
-                $LastKodePelanggan = $lastPelanggan->getAttributes()['pelanggan_id'];
-
+                
                 if ($lastPelanggan) {
+                    $LastKodePelanggan = $lastPelanggan->getAttributes()['pelanggan_id'];
                     $lastCode = (int) substr($LastKodePelanggan, 2);
                 } else {
                     $lastCode = 0;
@@ -158,7 +158,7 @@ class CartController extends Controller
 
                 $newCode = $lastCode + 1;
 
-                $kodePelanggan = 'SQ' . str_pad($newCode, 10 - 2, '0', STR_PAD_LEFT);
+                $kodePelanggan = 'SQ' . str_pad($newCode, 5 - 2, '0', STR_PAD_LEFT);
 
                 $pelanggan = Pelanggan::create([
                     'pelanggan_id' => $kodePelanggan,

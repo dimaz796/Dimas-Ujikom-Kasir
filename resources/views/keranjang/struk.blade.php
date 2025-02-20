@@ -23,7 +23,7 @@
                         @endif
                     </div>
                     <div class="text-right">
-                        <p><strong>Tanggal:</strong> {{ $penjualan->user->tanggal_pembelian }}</p>
+                        <p><strong>Tanggal:</strong> {{ $penjualan->tanggal_penjualan }}</p>
                         <p><strong>Kasir:</strong> {{ $penjualan->user->name }}</p>
                     </div>
                 </div>

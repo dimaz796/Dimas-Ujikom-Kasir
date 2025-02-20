@@ -119,7 +119,7 @@
                     <form action="{{ route('keranjang.pembayaran') }}" method="POST">
                         @csrf
                         <div class="fw-semibold">Data Pelanggan</div>
-                        <input type="hidden" id="keterangan" name="keterangan" value="Member">
+                        <input type="hidden" id="keterangan" name="keterangan" value="member">
 
 
                         <!-- Switch Member/Non-Member -->
@@ -149,7 +149,7 @@
                                     <div class="input-group">
                                         <span class="input-group-text">SQ</span>
                                         <input type="text" class="form-control" id="pelanggan_id" name="pelanggan_id"
-                                            placeholder="Masukkan Nomor" value="{{ old('pelanggan_id') }}" maxlength="8">
+                                            placeholder="Masukkan Nomor" value="{{ old('pelanggan_id') }}" maxlength="3">
                                     </div>
                                 </div>
 
@@ -166,13 +166,13 @@
 
                             <div id="memberData" class="hidden">
                                 <div class="py-1">
-                                    <input type="text" class="form-control" id="nama_pelanggan" name="nama_pelanggan_member" placeholder="Nama Pelanggan" readonly>
+                                    <input type="text" class="form-control" id="nama_pelanggan_member" name="nama_pelanggan_member" placeholder="Nama Pelanggan" readonly>
                                 </div>
                                 <div class="py-1">
-                                    <input type="text" class="form-control" id="alamat_pelanggan" name="alamat_pelanggan_member" placeholder="Alamat" readonly>
+                                    <input type="text" class="form-control" id="alamat_pelanggan_member" name="alamat_pelanggan_member" placeholder="Alamat" readonly>
                                 </div>
                                 <div class="py-1">
-                                    <input type="number" class="form-control" id="nomor_telepon" name="nomor_telepon_member" placeholder="No Telepon" readonly>
+                                    <input type="number" class="form-control" id="nomor_telepon_member" name="nomor_telepon_member" placeholder="No Telepon" readonly>
                                 </div>
                             </div>
                         </div>
@@ -278,18 +278,19 @@
                     .then(response => response.json())
                     .then(data => {
                         console.log(data);
+                        
                         if (data.success) {
-                            document.getElementById("nama_pelanggan").value = data.pelanggan.nama_pelanggan;
-                            document.getElementById("alamat_pelanggan").value = data.pelanggan.alamat_pelanggan;
-                            document.getElementById("nomor_telepon").value = data.pelanggan.nomor_telepon;
+                            document.getElementById("nama_pelanggan_member").value = data.pelanggan.nama_pelanggan;
+                            document.getElementById("alamat_pelanggan_member").value = data.pelanggan.alamat_pelanggan;
+                            document.getElementById("nomor_telepon_member").value = data.pelanggan.nomor_telepon;
 
-                            memberData.classList.remove("hidden"); // Tampilkan data pelanggan
+                            memberData.classList.remove("hidden");
                         } else {
                             alert("Pelanggan tidak ditemukan!" + pelangganId);
                         }
                     })
                     .catch(error => console.error("Terjadi kesalahan:", error));
-            });
+                });
             $('button[data-id][data-stok]').on('click', function() {
                 var produkId = $(this).data('id');
                 var stok = $(this).data('stok');
