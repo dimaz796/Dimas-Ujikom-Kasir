@@ -1,4 +1,4 @@
-/public/*
-!.gitignore
-!/public/produk/
-!/public/produk/*
+# /public/*
+# !.gitignore
+# !/public/produk/
+# !/public/produk/*
