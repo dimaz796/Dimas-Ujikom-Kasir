@@ -64,7 +64,7 @@
                                              <span class="font-semibold">Print</span>
                                          </a>
                                         <button class="btn btn-danger w-full mb-2" onclick="window.location.href='{{ route('transaksi.exportToPDF', ['bulan' => $selectedMonth, 'tahun' => $selectedYear]) }}'"><span class="font-semibold">PDF</span></button>
-                                        {{-- <button class="btn btn-success w-full" onclick="window.location.href='{{ route('transaksi.exportToExcel', ['bulan' => $selectedMonth, 'tahun' => $selectedYear]) }}'"><span class="font-semibold">Excel</span></button> --}}
+                                        <button class="btn btn-success w-full" onclick="window.location.href='{{ route('transaksi.exportToExcel', ['bulan' => $selectedMonth, 'tahun' => $selectedYear]) }}'"><span class="font-semibold">Excel</span></button>
                                     </div>
                                 </div>
 
