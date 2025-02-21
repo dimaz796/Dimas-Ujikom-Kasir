@@ -14,7 +14,10 @@ Sebelum memulai, pastikan Anda memiliki:
 
 -   **XAMPP** (atau server lokal dengan PHP dan MySQL)
 
-## Library
+-   **Visual Studio Code**
+
+
+## Library 
 
 - **Bootstrap 5.3**
 
@@ -62,7 +65,7 @@ npm install
 ```
 
 - Jika Memiliki File Database, Lompati Migrasi database dan seeding data.
-Langsung saja import database yang berada dalam folder
+Langsung saja import database yang berada dalam folder 
 
 -   Migrasi database dan seeding data:
 
