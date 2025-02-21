@@ -136,6 +136,11 @@ class CartController extends Controller
 
             $pelangganRequest = 'SQ' . $request->pelanggan_id;
             $pelanggan = Pelanggan::where('pelanggan_id', $pelangganRequest)->first();
+
+            if (!$pelanggan) {
+                return redirect()->back()->with('error', 'Pelanggan tidak ditemukan')
+                    ->withInput();
+            }
             $kodePelanggan = $pelanggan->getAttributes()['pelanggan_id'];
             if ($pelanggan) {
                 $namaPelanggan = $pelanggan->nama_pelanggan;
@@ -149,7 +154,7 @@ class CartController extends Controller
 
             if (!empty($namaPelanggan) && !empty($alamatPelanggan) && !empty($nomorTelepon)) {
                 $lastPelanggan = Pelanggan::orderBy('pelanggan_id', 'desc')->first();
-                
+
                 if ($lastPelanggan) {
                     $LastKodePelanggan = $lastPelanggan->getAttributes()['pelanggan_id'];
                     $lastCode = (int) substr($LastKodePelanggan, 2);
