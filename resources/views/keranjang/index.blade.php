@@ -182,9 +182,9 @@
                             <span class="font-semibold">Masukan Nominal</span>
                             <div class="input-group">
                                 <span class="input-group-text">Rp</span>
-                                <input type="text" class="form-control" placeholder="Nominal Pembayaran" name="nominal_pembayaran" required value="{{ old('nominal_pembayaran') }}">
+                                <input type="text" class="form-control" min="1" placeholder="Nominal Pembayaran" name="nominal_pembayaran" required value="{{ old('nominal_pembayaran') }}">
                             </div>
-                            
+
                         </div>
                         @if (session('error'))
                             <div class="text-red-600">
@@ -291,7 +291,7 @@
                     .then(response => response.json())
                     .then(data => {
                         console.log(data);
-                        
+
                         if (data.success) {
                             document.getElementById("nama_pelanggan_member").value = data.pelanggan.nama_pelanggan;
                             document.getElementById("alamat_pelanggan_member").value = data.pelanggan.alamat_pelanggan;

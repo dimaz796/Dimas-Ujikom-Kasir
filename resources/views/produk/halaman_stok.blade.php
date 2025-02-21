@@ -19,7 +19,13 @@
                         <h1 class="text-2xl font-semibold text-gray-800">{{ $produk->nama_produk }}</h1>
 
                         <div class="mb-3 mt-3">
-                            <input type="number" name="stok_tambahan" placeholder="Tambah Stok Produk" required class="form-control">
+                            <span>Stok Saat Ini</span>
+                            <input type="number" name="stok"  value="{{ $produk->stok }}" disabled class="form-control">
+                        </div>
+
+                        <div class="mb-3 mt-3">
+                            <span>Tambahan Stok</span>
+                            <input type="number" name="stok_tambahan" placeholder="Tambah Stok Produk" required class="form-control" min="1">
                         </div>
 
                         <button type="submit" class="btn btn-primary mb-2">Tambah Stok</button>

@@ -17,7 +17,7 @@
                        <input type="number" name="harga" placeholder="Harga Produk" required class="form-control">
                     </div>
                     <div class="mb-3">
-                       <input type="number" name="stok" placeholder="Stok Produk" required class="form-control">
+                       <input type="number" name="stok" min="1" placeholder="Stok Produk" required class="form-control">
                     </div>
                     <div class="mb-3">
                        <input type="file" name="foto" class="form-control">
@@ -29,6 +29,6 @@
         </div>
     </div>
 </div>
-    
+
 
 @endsection
